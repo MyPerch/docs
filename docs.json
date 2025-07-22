@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Perch Partner API Documentation",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#327766",
+    "light": "#4A9B8E",
+    "dark": "#225544"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -17,13 +17,30 @@
             "group": "Getting started",
             "pages": [
               "index",
-              "getting-started/api-overview"
+              "getting-started/api-overview",
+              "getting-started/postman-setup"
+            ]
+          },
+          {
+            "group": "Embeds",
+            "pages": [
+              "embeds/overview",
+              "embeds/demos"
             ]
           }
         ]
       },
       {
         "tab": "Partner API",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/overview",
+              "api-reference/submitting-and-tracking-leads"
+            ]
+          }
+        ],
         "openapi": "https://perch-api-docs.s3.ca-central-1.amazonaws.com/perch-partner.spec.json"
       },
       {
@@ -36,17 +53,17 @@
         {
           "anchor": "Client Portal",
           "href": "https://app.myperch.io",
-          "icon": "house-user"
+          "icon": "user"
         },
         {
-          "anchor": "Perch Website",
+          "anchor": "Home",
           "href": "https://myperch.io",
-          "icon": "globe"
+          "icon": "house"
         },
         {
           "anchor": "Support",
           "href": "mailto:support@myperch.io",
-          "icon": "life-ring"
+          "icon": "envelope"
         }
       ]
     }
@@ -70,7 +87,8 @@
   },
   "footer": {
     "socials": {
-      "linkedin": "https://linkedin.com/company/perch-io"
+      "linkedin": "https://www.linkedin.com/company/perchcanada/",
+      "facebook": "https://www.facebook.com/PerchCanada/"
     }
   }
 }

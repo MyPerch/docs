@@ -1,0 +1,86 @@
+---
+title: 'Embed Demos'
+description: 'Live demonstrations of Perch embeddable tools including mortgage calculators, rate displays, and more'
+---
+
+import { PerchEmbed } from '/snippets/perch-embed.jsx';
+
+## Live Embed Demonstrations
+
+Explore our collection of embeddable financial tools in action. Each demo shows how these tools can seamlessly integrate into your website while providing valuable functionality to your visitors.
+
+## Mortgage Calculator
+
+Our interactive mortgage calculator helps users estimate monthly payments, explore different loan scenarios, and understand affordability options.
+
+<PerchEmbed widgetId="1CqmKS4y" title="Perch Mortgage Calculator" />
+
+---
+
+## Mortgage Rate Display
+
+Stay up-to-date with current mortgage rates and market conditions.
+
+<PerchEmbed widgetId="mhqaKgPZ" height="505px" title="Current Mortgage Rates" />
+
+---
+
+## Affordability Calculator
+
+Help users determine how much home they can afford based on their income, debts, and down payment.
+
+<PerchEmbed widgetId="1yV9SWMk" height="592px" title="Home Affordability Calculator" />
+
+---
+
+## Refinance Analysis Tool
+
+Allow visitors to explore refinancing options and potential savings with their current mortgage.
+
+<PerchEmbed widgetId="dNpZU8NF" height="278px" title="Refinance Calculator" />
+
+---
+
+## Pre-Approval Estimator
+
+Provide users with an estimate of their pre-approval amount based on their financial information.
+
+<PerchEmbed widgetId="nPaRVto1" height="261px" title="Pre-Approval Estimator" />
+
+## Implementation
+
+Each embed uses the same simple integration pattern with a unique widget ID:
+
+```html
+<div class="perch-widget" widget-id="your-widget-id">
+<!-- Replace the inner content with custom loader -->
+<div class="perch-widget-loading-indicator" style="text-align: center;">Loading...</div>
+</div>
+<script src="https://embeds.myperch.io/assets/perch-embed-widget.js"></script>
+```
+
+## Customization Options
+
+- **Widget sizing**: Embeds automatically adjust to container width
+- **Loading indicators**: Customizable loading messages and styling
+- **Brand integration**: Tools can be styled to match your website's design
+- **Responsive design**: Works seamlessly across desktop and mobile devices
+
+## Getting Your Widget IDs
+
+To implement these embeds on your website:
+
+1. Contact your Perch account representative
+2. Specify which tools you'd like to embed
+3. Receive your custom widget IDs
+4. Implement using the simple HTML code structure shown above
+
+<Note>
+Widget IDs shown in these demos are examples. Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) to receive your production widget IDs.
+</Note>
+
+## Next Steps
+
+- Review the [Embeds Overview](/embeds/overview) for more information
+- Contact your account representative to get started
+- Explore the [API documentation](/api-reference/overview) for additional integration options 

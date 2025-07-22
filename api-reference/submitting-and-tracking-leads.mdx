@@ -1,0 +1,320 @@
+---
+title: 'Submitting & Tracking Leads'
+description: 'Complete walkthrough of using the Perch API to submit leads and monitor their progress through the mortgage application lifecycle'
+---
+
+## Overview
+
+Perch created its public API to provide our partners with an easy-to-use, leading as a service (LaaS) offering. Using the Perch API, partners can programmatically drive mortgage seekers towards securing mortgage products through Perch's online ecosystem (purchase, renewal, refinance, etc.).
+
+This guide provides detailed steps and examples on how your company can integrate our Leads submission and monitoring functionality into your internal systems to keep track of Leads and monitor their progress once they've joined Perch.
+
+## Requirements
+
+To use this guide you will need the following pieces of data (all of which are provided to you by Perch):
+
+1. **`x-api-key`**: A UUID V4 which grants you access to the Perch API
+2. **`Firm.id`**: The unique identifier of your firm
+3. **`ReferralCode.id`**: The unique identifier of your firm's referral code
+
+## 1. Creating a Lead
+
+Leads is a group of highly flexible endpoints which enable the submission of customer data to Perch (refer to the Leads API Spec) and retrieval of Lead and associated Plan data.
+
+### Using the Perch API partners can:
+
+1. Remove much of the overhead in the client's application process by proactively populating a client profile prior to that client's registration with Perch
+2. Track the status of the submitted Lead (i.e. have they completed registration with Perch, have they started a mortgage application, have they received a pre-approval, etc.)
+
+To implement such functionality, you may consider creating a **lead submission form** within the client profile page of your CRM. Your account managers can use this form to create a Lead in Perch after identifying the client is a good fit for Perch's product offering. You could design the form to accept custom parameters like notes and the deal purpose to better define the engagement opportunity for Perch's Customer Success Team.
+
+The more detail provided when creating a Lead, the simpler the application process for the client as they will not need to re-enter these details when they enter into the Perch ecosystem. Instead, when a client completes account registration, all Lead data will automatically be populated on their Client's profile.
+
+<Note>
+Rest assured, Perch has prioritized the security of your data. Perch employs robust encryption measures to safeguard all Lead data, both at rest and in transit, ensuring your clients' sensitive information remains protected.
+</Note>
+
+### Upon submitting a Lead to Perch you can expect:
+
+- The Lead will be populated in Perch's database and made accessible via `GET` and update via `PATCH`
+- Perch will immediately send a personalized, co-branded welcome message to the email address provided in the Lead request. The email will provide a brief overview of Perch and invite the user to sign up. Please note that this email can be **_disabled_** if you wish to send your own automated communication when submitting Leads to Perch
+- Perch's customer experience team will automatically be deployed to help assist in onboarding the Lead
+- When the client signs up for Perch their Lead data will be converted into a client profile (we call this "conversion"). The `lead` object will be updated with a **`convertedAt`** date, a **`deletedAt`** date (the lead is automatically archived upon conversion) and if `Plan` data was included in the `lead`'s `clientData` object then the plan(s) will be created and the lead will be updated with the related `plan_ids` so that you can either join the `Plans` on the leads (with an optional param: `includes=Plans`) or look them up directly
+
+<Warning>
+**Important**: to automatically populate the client's profile with the submitted **`Lead`** data, the client must sign up using the **same email address** that was used to create the **`Lead`**.
+</Warning>
+
+In the Perch ecosystem, a **`Plan`** is simply the name we've given to the resource which contains details related to one or more mortgage applications (e.g. home buying plan, refinancing plan, etc.). Since it is possible for a client to have simultaneous mortgage applications (e.g 1st & 2nd position mortgage / 1st position mortgage + HELOC), we created the **`Plans`** resource to allow for the bucketing of the related applications. You can assume that 90% of the time a Plan has only one mortgage application.
+
+To create a Lead, make a `POST` request to the endpoint [/firms/{firm_id}/leads](/partner/api-documentation#tag/Lead/operation/post-leads-for-firm). Upon successful creation of a Lead we recommend storing the Lead.id primary key in your own system so that you can periodically check for updates on the Lead's conversion (i.e. did they actually sign up, where are they at in their process, etc.).
+
+### Example Request
+
+```bash
+curl -X POST 'https://api.partner.myperch.io/v1/firms/{firm_id}/leads' \
+-H 'x-api-key: your_api_key' \
+-H 'Content-Type: application/json' \
+-d '{
+    "email": "elliot91@yahoo.com",
+    "firstName": "Elliot",
+    "lastName": "Lynch",
+    "phone": {
+      "number": "0788243632",
+      "extension": "402"
+    },
+    "clientData": {
+      "prefix": "Ms.",
+      "citizenship": "Permanent Legal Resident (PR)",
+      "dateOfBirth": "1968-09-25",
+      "maritalStatus": "Single",
+      "isFirstTimeHomeBuyer": false,
+      "notes": "Lorem ipsum..."
+    }
+}'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "cXzT1EtA",
+    "createdAt": "2023-12-12T00:31:42.155Z",
+    "updatedAt": "2023-12-12T00:31:42.155Z",
+    "email": "elliot91@yahoo.com",
+    "firstName": "Elliot",
+    "lastName": "Lynch",
+    "phone": {
+      "number": "0788243632",
+      "extension": "402"
+    },
+    "clientData": {
+      "prefix": "Ms.",
+      "citizenship": "Permanent Legal Resident (PR)",
+      "dateOfBirth": "1968-09-25",
+      "maritalStatus": "Single",
+      "isFirstTimeHomeBuyer": false,
+      "notes": "Lorem ipsum..."
+    },
+    "resourceType": "Firm",
+    "resourceId": "mctTVsRB",
+    "deletedAt": null,
+    "convertedAt": null
+  }
+}
+```
+
+This request will create a new **`Lead`** associated with your firm, with details like email, name, and client data. **`Firms`** is the resource used to denote partner organizations. In this case the **`:id`** will be your firm's unique **`Firm.id`** value which will be provided by your Perch account representative.
+
+## 2. Monitoring the Conversion Status of a Lead
+
+You can monitor the status of a **`Lead`** by making a GET request to [/leads/{lead_id}](/partner/api-documentation#tag/Lead/operation/get-lead). The **`convertedAt`** parameter in the response indicates if/when the lead was converted for a **`ClientProfile`**.
+
+Please make sure you use **`?scope=withDeleted`** to ensure that the endpoint returns even deleted **`Leads`**.
+
+### Example Request
+
+```bash
+curl -X GET 'https://api.partner.myperch.io/v1/leads/{lead_id}?scope=withDeleted' \
+-H 'x-api-key: your_api_key'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "cXzT1EtA",
+    "createdAt": "2023-12-12T00:31:42.155Z",
+    "updatedAt": "2023-12-12T00:31:42.155Z",
+    "email": "elliot91@yahoo.com",
+    "firstName": "Elliot",
+    "lastName": "Lynch",
+    "phone": {
+      "number": "0788243632",
+      "extension": "402"
+    },
+    "clientData": {
+      "prefix": "Ms.",
+      "citizenship": "Permanent Legal Resident (PR)",
+      "dateOfBirth": "1968-09-25T10:36:49.352Z",
+      "maritalStatus": "Single",
+      "isFirstTimeHomeBuyer": false
+    },
+    "resourceType": "Firm",
+    "resourceId": "mctTVsRB",
+    "deletedAt": "2023-12-12T00:31:42.370Z",
+    "convertedAt": "2023-12-12T00:31:42.350Z"
+  }
+}
+```
+
+The **`convertedAt`** datetime value denotes the time at which the **`Lead`** was promoted from a **`Lead`** to a **`ClientProfile`**. In most cases, this is when the client completes the Perch registration process.
+
+The **`deletedAt`** datetime value is set at the same time as **`convertedAt`** to automatically archive the lead record by setting the **`deletedAt`** value. If a Perch Representative archives a **`Lead`** the **`deletedAt`** value will be populated, but the **`convertedAt`** value will not.
+
+### When a lead converts, you can expect the following:
+
+- The **`Lead`** record will receive a one time update in which the **`convertedAt`** and **`deletedAt`** value will be set
+- All **`Firm Member`** owners associated with the **`Firm`**, who have an active Perch Notification subscription will receive an email alert letting them know the lead has converted. Your Perch Account Manager can help you set this up
+- If `Plans` were included in the `ClientData` of the `Lead`, a `planId` will also be set in the Plan object response. You can extend your GET request to fetch Leads to include Plan data or use this `plan_id` to access the `Plan` details via the Plan endpoint. You can learn more about including `Plan` data in your `Lead` in section 4 below
+
+## 3. Retrieve all Leads for a Given Firm
+
+In the event that you would like to see all the leads you've created for your firm you can use the GET [firms/:id/leads](/partner/api-documentation#tag/Lead/operation/get-leads-for-firm) endpoint.
+
+### Example Request
+
+```bash
+curl -X GET 'https://api.partner.myperch.io/v1/firms/{firm_id}/leads?scope=withDeleted' \
+-H 'x-api-key: your_api_key'
+```
+
+The response returned will contain an array of **`Leads`** created by the provided **`Firm`**. The default list **`limit`** is 50 and **`offset`** is 0. Please refer to our detailed API documentation to learn about the use of params like **`limit`** and **`offset`** to page through results.
+
+## 4. Creating a Lead with Plan Data
+
+When you provide **`Plan`** data as part of your **`Lead`** submission, we will automatically make you an owner of that plan upon conversion which means you'll be able to access the Plan via API should you wish to monitor the Client's application progress. You'll also be subscribed to email updates for Plans where you are an owner.
+
+<Warning>
+To protect Client privacy, **`Plans`** created by a client after registration will not automatically be accessible by the **`Lead`** owner.
+</Warning>
+
+It is possible to provide you with access to a plan retroactively, but requires manual intervention by Perch's Customer Experience team. Please speak with your Perch Account Manager if you need assistance linking converted Leads to Plans.
+
+Including **`Plan`** data when creating a lead is simple as seen in the example below. Notice the inclusion of **`Plans`** array in the clientData object in request body. In this case we are including one plan with the deal purpose of **`Buying`** (Please make note of the various Plan **`types`** in our full API documentation). **`Plans`** is an array and can accept one or more values (e.g. the client is looking to Buy and Renew an existing mortgage).
+
+### Example Request
+
+```bash
+curl -X POST 'https://api.partner.myperch.io/v1/firms/{firm_id}/leads' \
+-H 'x-api-key: your_api_key' \
+-H 'Content-Type: application/json' \
+-d '{
+    "email": "elliot91@yahoo.com",
+    "firstName": "Elliot",
+    "lastName": "Lynch",
+    "phone": {
+      "number": "0788243632",
+      "extension": "402"
+    },
+    "clientData": {
+      "prefix": "Ms.",
+      "citizenship": "Permanent Legal Resident (PR)",
+      "dateOfBirth": "1968-09-25T10:36:49.352Z",
+      "maritalStatus": "Single",
+      "isFirstTimeHomeBuyer": false,
+      "notes": "Lorem ipsum",
+      "Plans": [
+        {
+          "type": "Buying"
+        }
+      ]
+    }
+}'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "cXzT1EtA",
+    "createdAt": "2023-12-12T00:31:42.155Z",
+    "updatedAt": "2023-12-12T00:31:42.155Z",
+    "email": "elliot91@yahoo.com",
+    "firstName": "Elliot",
+    "lastName": "Lynch",
+    "phone": {
+      "number": "0788243632",
+      "extension": "402"
+    },
+    "clientData": {
+      "Plans": [
+        {
+          "type": "Buying"
+        }
+      ]
+    },
+    "resourceType": "Firm",
+    "resourceId": "mctTVsRB",
+    "deletedAt": null,
+    "convertedAt": null
+  }
+}
+```
+
+In the event where the lead has converted, you can expect the `Plan` object to contain a `plan.id` value which you can use to retrieve that plan's details. The plan is automatically created during the lead conversion workflow (i.e. when the lead accepts the invitation and signs up for Perch).
+
+## 5. Retrieving Plans
+
+### 5.1 Get Plans where you are the Lead Owner
+
+When you create a **`Lead`** with one or more **`Plans`**, you are automatically granted access to those plans **_THROUGH_** your ownership of the Lead. The simplest way to access those Plans is to simply join the **`Plans`** data onto a **`GET`** **`Leads`** request as seen below. Include the **withDeleted** scope to ensure that both **converted** and **unconverted** Leads are returned in your response.
+
+### Example Request
+
+```bash
+curl -X GET 'https://api.partner.myperch.io/v1/firms/{firm_id}/leads?scope=withDeleted&include=Plans' \
+-H 'x-api-key: your_api_key'
+```
+
+This request fetches all Leads and associated Plans for the provided **`firmId`**. This response provides a snapshot of the current mortgage applications that you are able to access.
+
+The response will contain an array of **`Leads`** owned by the provided **`firmId`** and any associated **`Plans`**. The default list **`limit`** is 50 and **`offset`** is 0. Please refer to our detailed API documentation to learn about the use of params like **`limit`** and **`offset`** to page through results.
+
+## 6. Updating a Lead
+
+You can continue to update a **`Lead`** with additional details up until the point where the lead has converted (as denoted by the **`convertedAt`** and **`deletedAt`** datetime value being set). Updating a **`Lead`** after conversion is not advantageous as the conversion process whereby lead data populates the client's profile will have already taken place.
+
+You can update a lead through the PATCH [/leads/{lead_id}](/partner/api-documentation#tag/Lead/operation/patch-Lead).
+
+### Example Request
+
+```bash
+curl -X PATCH 'https://api.partner.myperch.io/v1/leads/{lead_id}' \
+-H 'x-api-key: your_api_key'
+```
+
+## 7. Disabling Perch's Default Outreach Automation
+
+As discussed above, when a [Lead](/partner/api-documentation) is created in Perch, we automatically send a welcome message to the email address in the submitted **`Lead`**. To disable this default messaging when creating a **`Lead`**, you can use the **`disableClientOutreach`** parameter in your POST [/firms/{firm_id}/leads/](/partner/api-documentation#tag/Lead/operation/post-leads-for-firm).
+
+You may wish to apply this flag if you want to manage your own automated lead outreach messaging strategy.
+
+### Example Request
+
+```bash
+curl -X POST 'https://api.partner.myperch.io/v1/firms/{firm_id}/leads?disableClientOutreach=true' \
+-H 'x-api-key: your_api_key' \
+-H 'Content-Type: application/json' \
+-d '{
+    "email": "client1@yahoo.com",
+    "firstName": "Billy",
+    "lastName": "Bob",
+    "phone": {
+      "number": "2223334444"
+    }
+}'
+```
+
+## 8. Retrieving all Leads (Including Deleted Leads)
+
+To get all leads for your firm, including those that have been deleted, use the **`withDeleted`** scope in your GET [/firms/{firm_id}/leads](/partner/api-documentation#tag/Lead/operation/get-leads-for-firm):
+
+### Example Request
+
+```bash
+curl -X GET 'https://api.partner.myperch.io/v1/firms/{firm_id}/leads?scope=withDeleted' \
+-H 'x-api-key: your_api_key'
+```
+
+This request will return both active and deleted lead records, providing a comprehensive view of all leads associated with your firm.
+
+## Next Steps
+
+- Review the [Partner API Overview](/api-reference/overview) for conceptual understanding
+- Explore the full [Partner API documentation](/partner/api-documentation) for detailed endpoint specifications
+- Set up [Postman](/getting-started/postman-setup) for API testing
+- Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) for implementation assistance 

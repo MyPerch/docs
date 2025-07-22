@@ -1,0 +1,126 @@
+---
+title: 'Postman Setup Guide'
+description: 'Step-by-step guide to import and configure the Perch API in Postman for instant testing'
+---
+
+## Overview
+
+By simply importing one of our API Spec documents into Postman, you can start using the Perch API near-instantly. Follow the guide below to download and import an OpenAPI Spec into Postman.
+
+## Requirements
+
+Before getting started, ensure you have:
+
+- The [Postman application](https://www.postman.com/downloads/)
+- An OpenAPI Spec from Perch
+- An API Key from Perch
+
+## Download API Specs
+
+Choose the appropriate API specification for your use case:
+
+- **Partner API Spec** - Available in the Partner API documentation
+- **Realtor API Spec** - Available in the Realtor API documentation (if applicable)
+
+<Note>
+Please contact us at [partnersupport@myperch.io](mailto:partnersupport@myperch.io) should you have any challenges or questions obtaining any of the above.
+</Note>
+
+## Setup Instructions
+
+### Step A: Import the API Spec
+
+1. Click **Import** in Postman.
+
+<Frame caption="Click the Import button in Postman to begin importing the API specification">
+  <img src="https://cdn.prod.website-files.com/651c7754a77a0bf5a62ced01/65b33679be4fad427350ee46_03a2e2ef-c433-4040-af84-c53e342ec8c1.png" />
+</Frame>
+
+### Step B: Configure Import Settings
+
+1. Select **OpenAPI 3.1 with a Postman Collection**
+2. Click into **View Import Settings** before doing the import
+
+<Frame caption="Select OpenAPI 3.1 with a Postman Collection and access import settings">
+  <img src="https://cdn.prod.website-files.com/651c7754a77a0bf5a62ced01/65b336b2d6921d1c29922f6a_d2fc3d30-0d83-430e-91af-06596083725e.png" />
+</Frame>
+
+### Step C: Set Import Preferences
+
+Configure the import settings as follows:
+
+1. Set **Parameter generation** to **Example**
+2. Set **Folder organization** to **Tags**
+3. Click the back arrow to return to the previous screen and click **Import**
+
+<Frame caption="Configure parameter generation to Example and folder organization to Tags">
+  <img src="https://cdn.prod.website-files.com/651c7754a77a0bf5a62ced01/65b336c934729d4f90bf48f8_78fdbf48-89fd-4749-b026-8b7ccf0b69d0.png" />
+</Frame>
+
+### Step D: Verify Import Success
+
+Once imported, you will be able to see the imported Definition and Collection:
+
+1. Open the **APIs** section
+2. Expand the sections to view the **Definition** and the **Perch Partner API Collection**
+
+<Frame caption="View the imported API definition and Perch Partner API Collection in the APIs section">
+  <img src="https://cdn.prod.website-files.com/651c7754a77a0bf5a62ced01/65b336dbfff0e179d7ef1b9c_f0326ff8-0def-4d4e-a430-56b374318e72.png" />
+</Frame>
+
+### Step E: Configure API Authentication
+
+Set up your API key using the provided credentials:
+
+1. Open the **Perch Partner API Collection**
+2. Open the **Variables** section and add the **`apiKey`** variable. This will apply the API key to all the requests in the collection.
+
+<Frame caption="Add your API key in the Variables section of the Perch Partner API Collection">
+  <img src="https://cdn.prod.website-files.com/651c7754a77a0bf5a62ced01/65b336ea64ebec149f6a1c51_cfb7948d-7131-4bd6-af59-7af2cdfceeb2.png" />
+</Frame>
+
+<Warning>
+Remember to keep your API key secure and never expose it in client-side applications or public repositories.
+</Warning>
+
+### Step F: Explore Data Schemas
+
+To view the data schema for resources like a *Lead*:
+
+1. View **`index.json`** under the **Definition**
+2. In the **Components > schemas** section, you will find schema definitions (e.g., *Lead* schema). This outlines all the data fields and their acceptable values.
+
+<Frame caption="Explore data schemas in the Components > schemas section of the API definition">
+  <img src="https://cdn.prod.website-files.com/651c7754a77a0bf5a62ced01/65b3370150e10f26decfd81b_5af0e4df-b488-49eb-91eb-be92e6441692.png" />
+</Frame>
+
+### Step G: Test API Requests
+
+To make sample HTTP requests:
+
+1. Open the **Perch Partner API > Lead** section (or your desired endpoint)
+2. Choose a request in the collection
+3. View the **Body** of the request if applicable (e.g., **`POST/PATCH`** requests)
+4. To set parameters like **`:id`** in the URL path, open the **Params** section
+5. Click **Send** to make a request to the API based on the **`baseUrl`** in the Variables section
+
+<Frame caption="Test API requests by configuring parameters and clicking Send to execute the request">
+  <img src="https://cdn.prod.website-files.com/651c7754a77a0bf5a62ced01/65b33710900a276efb5c5a50_060f1cd3-1909-4550-a92a-af597d365532.png" />
+</Frame>
+
+<Note>
+By default, requests will be made to the test environment. You can modify the `baseUrl` variable to switch between test and production environments.
+</Note>
+
+## Next Steps
+
+Now that you have Postman configured with the Perch API:
+
+- Explore the various endpoints available in your collection
+- Review the [API Overview](/getting-started/api-overview) for authentication and usage details
+- Test different requests in the sandbox environment before moving to production
+- Refer to the full API documentation for detailed endpoint specifications
+
+## Need Help?
+
+If you encounter any issues during setup or have questions about using the Perch API, please don't hesitate to contact our support team at [partnersupport@myperch.io](mailto:partnersupport@myperch.io). 
