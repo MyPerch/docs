@@ -1,0 +1,252 @@
+---
+title: 'Implementation guide'
+description: 'Step-by-step instructions for implementing Perch embeddable tools across different platforms and frameworks'
+---
+
+This guide walks through the process of implementing Perch embeddable tools on various Content Management Systems (CMS) and technical platforms.
+
+## Basic embed code structure
+
+Your Perch representative will provide you with a code snippet that looks similar to this:
+
+```html
+<!-- DIV PORTION -->
+<div class="perch-widget" widget-id="ABC123">
+    <div class="perch-widget-loading-indicator">Loading...</div>
+</div>
+
+<!-- SCRIPT PORTION -->
+<script src="https://embeds.myperch.io/assets/perch-embed-widget.js"></script>
+```
+
+<Warning>
+Please do not use this code, it is simply an example. Your Perch representative will provide your specific widget ID and code.
+</Warning>
+
+### Code breakdown
+
+Let's break down the code snippet:
+
+1. **The `<div>` tag** denotes the location where the tool will appear on your page. You can place this anywhere in your page.
+2. **The `<script>` tag** loads the JavaScript that will automatically replace the `<div>` with the expected widget.
+
+### Custom loading indicator
+
+To improve the client user experience, we've added a feature to provide a custom loading indicator. You can use the inner `<div>` with the class `.perch-widget-loading-indicator` to insert a plain text loader (e.g. 'Loading...') that will be visible while the tool is being downloaded and rendered.
+
+You can replace the contents of this `<div>` with a custom message or a loading indicator of your choice to better match your branding:
+
+```html
+<div class="perch-widget" widget-id="YOUR-WIDGET-ID">
+    <div class="perch-widget-loading-indicator">
+        <span>Loading mortgage calculator...</span>
+        <!-- Or add your own custom loading animation -->
+    </div>
+</div>
+```
+
+<Info>
+Be sure that you retain the `.perch-widget-loading-indicator` class as this is what our script looks for when removing the loading indicator.
+</Info>
+
+## CMS-specific instructions
+
+<Warning>
+**Important**: In most cases, the CMS editor will not execute JavaScript and therefore the tool will not render in the editor. Instead you will see the "Loading..." text. To view the rendered tool, select your CMS's "preview" option to see the live version.
+</Warning>
+
+### WordPress + Elementor
+
+<Frame>
+  <iframe 
+    src="https://play.vidyard.com/JfhPqPBfqaqxSYqaG3ARmE" 
+    width="100%" 
+    height="360" 
+    frameborder="0" 
+    allowtransparency="true" 
+    allowfullscreen>
+  </iframe>
+</Frame>
+
+1. Navigate to the page where you want to embed the tool within your editor
+2. Add a new **HTML** element using Elementor
+3. Paste the provided `<div>` and `<script>` tags into the HTML element
+4. Save and publish your changes
+
+### Webflow
+
+1. Go to the page you wish to embed the tool on
+2. Add an **Embed** element to your page
+3. Paste the provided `<div>` and `<script>` tags into the Embed element
+4. Publish your site to see the tool in action
+
+### Squarespace
+
+1. Go to the page where you want to embed the tool
+2. Click on the **+** icon to add a new block and select **Code**
+3. Paste the provided `<div>` and `<script>` tags into the Code block
+4. Apply and save your changes
+
+### KVCore
+
+KVCore is different from other website CMS in that you need to enter the `<div>` and `<script>` tags in different locations:
+
+1. **Add the script tag**:
+   - Hover over **Web & IDX** in your sidebar navigation to reveal the menu
+   - Select **Website Settings** to open your website's setting panel
+   - Scroll down to the **custom header** section
+   - Put your `<script>` tag in this box and hit **save**
+
+2. **Add the div portion**:
+   - Go into your custom page editor
+   - Click the embed option **`<>`**
+   - Paste the `<div>` portion of your tool into the box
+   - Hit save and apply your changes to the site
+
+## Single Page Application integration
+
+Perch Widgets can be easily integrated into single-page applications (SPAs) like Angular, Vue.js, or React. However, SPAs manage the DOM differently compared to traditional multi-page websites.
+
+### Why manual initialization is needed
+
+In a traditional setup, the widget script relies on the DOM ready event to initialize. But in SPAs, the DOM is often dynamically updated, and elements containing the widget may not be available at the traditional DOM ready event.
+
+### Steps to initialize a widget in an SPA
+
+1. **Insert the widget into your HTML** as you normally would
+2. **Listen for the appropriate lifecycle hook** in your framework that guarantees the element containing the widget is present in the DOM
+3. **Emit the Perch widget initialization event** once the widget's DOM element is available
+
+#### Basic initialization code
+
+```javascript
+// Set the widget ID for the Perch widget
+var widgetId = "abc123";
+
+// Create a custom event that signals the Perch widget to initialize
+const event = new CustomEvent('perch-widget:init', {
+  detail: {
+    perchWidgetId: widgetId
+  }
+});
+
+// Dispatch the event on the window object
+window.dispatchEvent(event);
+```
+
+#### Angular example
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-widget-container',
+  template: `<div class="perch-widget" widget-id="abc123">
+    <div class="perch-widget-loading-indicator">Loading...</div>
+  </div>`,
+})
+export class WidgetContainerComponent implements OnInit {
+
+  ngOnInit() {
+    // Initialize the Perch widget when the component is initialized
+    const event = new CustomEvent('perch-widget:init', {
+      detail: {
+        perchWidgetId: 'abc123' // Replace with your actual widget ID
+      }
+    });
+    window.dispatchEvent(event);
+  }
+}
+```
+
+#### Vue.js example
+
+```javascript
+export default {
+  mounted() {
+    // Dispatch widget initialization when the component is mounted
+    const event = new CustomEvent('perch-widget:init', {
+      detail: {
+        perchWidgetId: 'abc123' // Replace with your actual widget ID
+      }
+    });
+    window.dispatchEvent(event);
+  }
+}
+```
+
+#### React example
+
+```javascript
+import { useEffect } from 'react';
+
+function WidgetContainer() {
+  useEffect(() => {
+    // Initialize widget when component mounts
+    const event = new CustomEvent('perch-widget:init', {
+      detail: {
+        perchWidgetId: 'abc123' // Replace with your actual widget ID
+      }
+    });
+    window.dispatchEvent(event);
+  }, []);
+
+  return (
+    <div className="perch-widget" widget-id="abc123">
+      <div className="perch-widget-loading-indicator">Loading...</div>
+    </div>
+  );
+}
+```
+
+### Best practices for SPAs
+
+- **Ensure that each widget is initialized only once per page**, particularly in SPAs where pages may not fully reload
+- **Dispatch the event** at the earliest point where you can guarantee the DOM element for the widget is present
+- **Clean up properly** when components are unmounted to prevent memory leaks
+
+## Custom implementations
+
+For custom implementations or unique technical requirements:
+
+1. **Include the script** on your page (ideally in the `<head>` section)
+2. **Place the widget div** where you want the tool to appear
+3. **Trigger initialization** manually if needed (for dynamic content)
+
+### Manual initialization
+
+If you need to initialize widgets dynamically (e.g., after AJAX content loads):
+
+```javascript
+// After adding widget HTML to the page
+const event = new CustomEvent('perch-widget:init', {
+  detail: {
+    perchWidgetId: 'your-widget-id'
+  }
+});
+window.dispatchEvent(event);
+```
+
+## Troubleshooting
+
+### Widget not appearing
+- Ensure the script tag is included on the page
+- Check that the widget ID matches what was provided by Perch
+- Verify JavaScript is enabled and not being blocked
+
+### Widget shows "Loading..." indefinitely
+- Check browser console for JavaScript errors
+- Ensure the page is being viewed live (not in editor mode)
+- Verify the script URL is accessible
+
+### Multiple widgets on one page
+- Each widget should have a unique widget-id
+- The script only needs to be included once per page
+- All widgets will initialize automatically
+
+## Need help?
+
+If you encounter issues during implementation:
+- Contact your Perch account representative
+- Email [partnersupport@myperch.io](mailto:partnersupport@myperch.io) with details about your platform and issue
+- Include screenshots or error messages when possible 

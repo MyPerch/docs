@@ -1,6 +1,6 @@
 ---
 title: 'API Overview'
-description: 'Getting started with the Perch API - authentication, concepts, and best practices'
+description: 'Getting started with the Perch API - core concepts, domains, and best practices'
 ---
 
 ## Getting Started
@@ -17,70 +17,11 @@ The Perch API is organized around both [restful](#restful-resources) and [workfl
 
 You will be able to use our API in both a sandbox environment as well as the live environment. Of course, use of the sandbox environment is highly encouraged while testing your integration as data submitted through the live environment will be treated as such and in many cases trigger automated workflows and/or customer service representative intervention.
 
-Your [domain](#domains) and [API key](#authentication) will dictate which environment is in use.
+Your [domain](#domains) and [API key](/getting-started/authentication) will dictate which environment is in use.
 
-## Terms of Use
+## Legal Requirements
 
-By accessing or using the Perch API (the "API"), you (the "Client") agree to be bound by the following Terms of Service ("TOS"). These terms govern your use of the API, which is provided by Perch (the "Service Provider"). If you do not agree to these terms, you must not use the API.
-
-The Perch API enables integration with Perch's platform, providing secure access to its data and services. These TOS are designed to ensure proper use of the API, maintain its security, and protect the interests of both parties.
-
-The Service Provider reserves the right to update or modify these TOS at any time. Significant changes will be communicated, and continued use of the API after such changes constitutes your acceptance of the updated terms.
-
-Please review the terms carefully, as violations may result in suspension or termination of your API access.
-
-### API Key Security and Access
-
-- The API key provided by the Service Provider is confidential and must be stored securely by the Client.
-- API keys shall not be exposed in front-end applications, shared publicly, or embedded in publicly accessible repositories or code.
-- The Client is responsible for maintaining the confidentiality of their API keys and any activities that occur under their account.
-- The Client must notify the Service Provider immediately of any unauthorized use, security breach, or compromise of their API key.
-- The Service Provider will treat the Client's API keys as confidential and will not disclose them to third parties.
-
-### Rate Limits and Usage
-
-- The Client agrees to adhere to the API rate limits as outlined in the Service Provider's documentation. Excessive requests may result in throttling, suspension, or termination of access.
-- The Client shall only use the API for purposes specified during onboarding or as agreed in writing with the Service Provider. Unauthorized, malicious, or exploitative use of the API is prohibited.
-
-### Data Privacy and Security
-
-- The Client agrees to handle all data obtained via the API in compliance with applicable data protection laws. Sensitive user data shall not be stored unless explicitly permitted by the Service Provider.
-- The Service Provider will maintain commercially reasonable security precautions to prevent unauthorized access to the API and Client data.
-- The Client acknowledges that using the API and connecting to the internet presents risks, including unauthorized third-party access, and agrees to take appropriate measures to secure their systems.
-
-### Modifications to the API
-
-- The Service Provider may modify the API, including rate limits, endpoints, or features, and will provide prior notice where feasible.
-- The Client agrees to update their integration to remain compatible with any modifications to the API.
-
-### Liability
-
-- The Service Provider is not liable for any direct or indirect damages resulting from the use or inability to use the API, including but not limited to service interruptions or data loss.
-
-### Termination
-
-- The Service Provider reserves the right to terminate access to the API if the Client breaches any term of this Agreement or engages in misuse of the API.
-- Termination for cause does not preclude additional remedies available under the law.
-
-## Overview
-
-To make use of the Perch API you will need both your API key and the Open API Specification document (**OAS 3.x**) for the Perch API. 
-
-From this point on, we will assume that you have imported the OAS document into Postman. You can follow our [Postman Setup guide](https://docs.myperch.io/api/postman-setup-guide) to get started with that.
-
-## Authentication
-
-The Perch API uses API keys for authentication. 
-
-Each API key belongs to a specific `Firm` and role type within our system. The key will be granted permissions based on the particular API functions your specific implementation requires.
-
-The API key must be sent to the Perch API using the `X-API-Key` (case-insensitive) HTTP header.
-
-As is the case with any API key, you should ensure that all connections to our API are encrypted and made from a backend system, rather than client side (e.g., from a client facing web browser) where a key can be accessed by a 3rd party.
-
-<Warning>
-**Perch is not responsible for the breach or loss of your data due to exposure of your API key to 3rd parties.**
-</Warning>
+Before using the Perch API, please review our [Terms of Use](/getting-started/terms-of-use) which outline important legal requirements, security obligations, and usage policies.
 
 ## Domains
 
@@ -91,94 +32,41 @@ The Perch API provides separate domains for our different API user roles and use
 | Realtor | api.realtor.dit.myperch.io | api.realtor.myperch.io |
 | Partner | api.partner.dit.myperch.io | api.partner.myperch.io |
 
-## Errors
-
-Perch uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the **`2xx`** range indicate success. Codes in the **`4xx`** range indicate an error that failed given the information provided (e.g., a required parameter was omitted, a charge failed, etc.). Codes in the **`5xx`** range indicate an error with Perch's servers (these are rare, but they can happen).
-
-| STATUS | CODE | DESCRIPTION |
-|--------|------|-------------|
-| `200` | OK | Everything worked as expected. |
-| `201` | Created | Successfully created a new resource. |
-| `401` | Unauthorized | No valid API key provided. |
-| `403` | Forbidden | The API key doesn't have permissions to perform the request. |
-| `404` | Not Found | The requested resource doesn't exist or you do not have permission to access it. |
-| `409` | Conflict | The request conflicts with another request (perhaps due to using the same idempotent key). |
-| `422` | Unprocessable Entity | The request was unacceptable, often due to missing a required parameter. |
-| `429` | Too Many Requests | Too many requests hit the API too quickly. We recommend an exponential backoff of your requests. |
-| `5xx` | Server Error | Something went wrong on Perch's end. (These are rare.) |
-
-The error will contain a helpful **`message`** and, in some cases (**`409`** and **`422`**), a **`fields`** object. The fields object will contain fields that failed some validation and an array of validation errors.
-
-```json
-// 409 - Conflict
-// This error indicates that a duplicate record exists for the parent (resourceId and resourceType polymorphic association) and the supplied email address.
-{
-  "message": "Failed to create the Lead",
-  "fields": {
-    "resourceId": [{
-      "code": "NOT_UNIQUE",
-      "message": "Failed to pass unique index constraint",
-    }],
-    "resourceType": [{
-      "code": "NOT_UNIQUE",
-      "message": "Failed to pass unique index constraint",
-    }],
-    "email": [{
-      "code": "NOT_UNIQUE",
-      "message": "Failed to pass unique index constraint",
-    }]
-  }
-}
-```
-
-### Error Codes
-
-| STATUS | CODE |
-|--------|------|
-| `INVALID` | The field does not follow the intended format, e.g., an invalid email address. |
-| `INCORRECT_TYPE` | The field has a value of an incorrect type, e.g., a Boolean passed to a Date field. |
-| `NOT_UNIQUE` | There's a conflict in the database on this field, e.g., a unique constraint is violated. |
-| `NOT_FOUND` | No records could be found for a lookup using this field. |
-| `UNSUPPORTED` | The field type is unsupported. Check the supported field types in the Changeset. |
-| `REQUIRED` | The field is required but is undefined or missing. |
-| `IN_USE` | The field is in use by another record. |
-
-## Soft Deletion
-
-Many of the resources in our system support soft-deletion, which we call "paranoid" resources. This means that records will not be removed from the database, but instead get a timestamp value set to the record's **`deletedAt`** column. Deleted records will not be returned or accessible by default via our endpoints.
-
-However, we do still offer a way to view these deleted records, using the **`scopes`** query option on our **`GET`** endpoints. You can read more about this in our [query parameters](#restful-query-parameters) documentation.
-
-## Rate Limiting
-
-Please take note that requests will be rate limited based on an hourly quota. The quota will allow for burst requests of up to 6x the hourly average quota.
-
-For example, if your quota is 500 requests / hour, then you cannot exceed 50 requests / minute. The hourly quota is rolling, so if you made 500 requests between 07:30 and 07:45, then you must wait until 08:30 before you can continue to use the API.
+<Note>
+Always start with the DIT (development/sandbox) domain for testing your integration before switching to production.
+</Note>
 
 ## Restful Resources
 
-The majority of uses of the Perch ecosystem can be managed via [Perch's Restful API](https://docs.myperch.io/partner/api-documentation). For use of the restful API for each resource, see the API documentation to review each's relevant schema.
+The majority of uses of the Perch ecosystem can be managed via Perch's Restful API. Our RESTful endpoints follow predictable patterns:
+
+- **GET** `/resources` - List resources (with pagination)
+- **GET** `/resources/:id` - Get a specific resource
+- **POST** `/resources` - Create a new resource
+- **PATCH** `/resources/:id` - Update an existing resource
+- **DELETE** `/resources/:id` - Delete a resource (soft delete)
+
+For detailed information about each resource and its schema, see the [Partner API Reference](/Partner%20API%20Reference).
 
 ## Workflows
 
 Workflows allow for non-restful interactions with the Perch system. This may be a multi-step action that impacts multiple resources, an action that has a more nuanced access control, or an action that requires non-restful parameters. To ensure all API actions conform to [ACID](https://docs.digitalocean.com/glossary/acid/) principles, we provide simplified interfaces for these complex actions in the form of workflows.
 
-## Advanced Topics
+Workflow endpoints follow the pattern: `/workflows/:workflow-id`
 
-### Restful Query Parameters
+## Getting Your API Credentials
 
-#### Pagination
+To make use of the Perch API you will need both your API key and the Open API Specification document (**OAS 3.x**) for the Perch API.
 
-By default, all index (i.e., GET /resources) calls to our API will be paginated. To paginate the API, you can use the limit and offset query parameters (e.g., GET /resources?limit=20&offset=40; page 3 with 20 records per page).
+**To get started:**
+1. Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) to request API access
+2. You'll receive your API key and access to the appropriate API specification
+3. Follow our [Postman Setup guide](/getting-started/postman-setup) to import the API specification
+4. Review our [Authentication guide](/getting-started/authentication) for implementation details
 
-#### Order
+## Next Steps
 
-Similar to pagination, index calls will be sorted by **`['createdAt', 'DESC']`**. You can override this by passing a new field and sort direction (i.e., **`'ASC'`** or **`'DESC'`**). For example, **`GET /resources?order=[['email', 'ASC']]`**.
-
-#### Filters
-
-When calling a restful **`GET`** endpoint, we support passing along filters to restrict the data that is passed back. These filters are a JSON object of fields as keys and exact values. For example, **`GET /resources?filter={"email": "john.doe@example.com"}`**. Depending on the tool you are using, you may need to URL encode the JSON before sending the request.
-
-#### Scopes
-
-The Perch API uses scopes to simplify common or complicated queries, or to perform requests that fall outside of the restful capabilities. For example, in order to fetch deleted resources, you would pass the **`withDeleted`** scope in your request (e.g., **`GET /resources?scope=withDeleted`**). Not all scopes are available for each resource, so keep an eye out on each resource to understand which scopes are supported. 
+- **Understand the basics**: Read about [Leads and Plans](/core-concepts/leads-and-plans) - the core objects you'll work with
+- **Handle errors properly**: Learn about [Errors and response codes](/getting-started/errors-and-response-codes)
+- **Optimize your integration**: Understand [Rate limits and pagination](/getting-started/rate-limits-and-pagination)
+- **Start building**: Follow our [Submitting & Tracking Leads guide](/api-reference/submitting-and-tracking-leads) 

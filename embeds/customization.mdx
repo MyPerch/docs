@@ -1,0 +1,152 @@
+---
+title: "Customization"
+description: "Learn how to customize Perch's embeddable tools with pre-filled data and styling options"
+---
+
+Perch's embeddable tools can be customized to pre-fill certain pieces of information and modify their appearance, which can significantly improve their usability and integration with your website.
+
+<Note>
+If you haven't already, be sure to speak with your point of contact at Perch to become a **Perch Partner** and get set up with our embeddable tool service.
+</Note>
+
+Our embeddable tool service provides **Perch Partners** with an array of mortgage and finance tools and calculators (e.g. live rates, purchase price qualifier, mortgage payment, etc.) that can be embedded on any website to enhance your user experience.
+
+## Why customize embedded tools?
+
+### Pre-filling values for better UX
+
+If you run a **property listing website** and want to embed our pre-qualification or mortgage payment calculator, you might want to pre-fill the **property price** from a particular listing so that:
+
+- Tool output values are pre-calculated using that listing price
+- Users don't need to manually adjust values
+- The experience feels seamless and integrated with your content
+
+### Consistent branding
+
+Customization also allows you to match the tool's appearance to your website's design system, creating a cohesive user experience.
+
+## How to inject variables
+
+The process is simple. Use our predefined data properties and set the value in the embed code using your CMS or templating language.
+
+### Basic example
+
+```html
+<div class="perch-widget" 
+     widget-id="uMsnqDSA" 
+     widget-purchase-price="YOUR-VARIABLE" 
+     widget-down-payment="YOUR-VARIABLE">  
+  <div class="perch-widget-loading-indicator">Loading...</div>  
+</div>
+```
+
+### Dynamic example with template variables
+
+```html
+<!-- Example with property listing data -->
+<div class="perch-widget" 
+     widget-id="uMsnqDSA" 
+     widget-purchase-price="{{ property.price }}" 
+     widget-annual-property-taxes="{{ property.taxes }}"
+     widget-monthly-maintenance-fee="{{ property.maintenance }}">  
+  <div class="perch-widget-loading-indicator">Loading...</div>  
+</div>
+```
+
+## Multi-widget embeds
+
+Perch supports both single and multi-widget embeds. Multi-widget embeds include a navigation bar to help users navigate between different calculators.
+
+### Global variable setting
+
+The great news is that injectable variables are set **globally**, which means:
+
+- Set them once on the embed code
+- All widgets contained in the embed will receive the provided variables
+- User-inputted values (e.g. income, down payment amount) are cached
+- If the user loads the same calculator again or on another page, the embed will remember their values
+
+## Supported variables
+
+Each widget has its own set of supported variables based on functionality. Here are the current supported global variables:
+
+### Financial data
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `widget-property-value` | Number | Property purchase price or current value |
+| `widget-annual-property-taxes` | Number | Annual property tax amount |
+| `widget-monthly-maintenance-fee` | Number | Monthly maintenance or HOA fees |
+| `widget-down-payment` | Number | Down payment amount in dollars |
+| `widget-down-payment-percent` | Number | Down payment as a percentage |
+| `widget-referral-code` | String | Partner referral code for lead attribution |
+
+### Styling options
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `widget-primary-color` | String (hex) | Primary brand color (e.g., "#327766") |
+| `widget-secondary-color` | String (hex) | Secondary accent color |
+| `widget-hide-titles` | Boolean | Whether to hide widget titles |
+
+## Implementation examples
+
+### Property listing integration
+
+```html
+<!-- Real estate listing page -->
+<div class="perch-widget" 
+     widget-id="mortgage-calculator"
+     widget-property-value="850000"
+     widget-annual-property-taxes="8500"
+     widget-monthly-maintenance-fee="350"
+     widget-primary-color="#327766"
+     widget-referral-code="REALTY-PARTNER-001">
+  <div class="perch-widget-loading-indicator">Loading calculator...</div>  
+</div>
+```
+
+### Branded styling
+
+```html
+<!-- Customized appearance -->
+<div class="perch-widget" 
+     widget-id="pre-qualification-tool"
+     widget-primary-color="#1a365d"
+     widget-secondary-color="#2d3748"
+     widget-hide-titles="true">
+  <div class="perch-widget-loading-indicator">Loading...</div>  
+</div>
+```
+
+### Dynamic CMS integration
+
+```php
+<!-- Example with PHP/WordPress -->
+<div class="perch-widget" 
+     widget-id="payment-calculator"
+     widget-property-value="<?php echo get_field('property_price'); ?>"
+     widget-down-payment-percent="<?php echo get_field('suggested_down_payment'); ?>"
+     widget-referral-code="<?php echo get_option('perch_referral_code'); ?>">
+  <div class="perch-widget-loading-indicator">Loading...</div>  
+</div>
+```
+
+## Best practices
+
+### Performance
+- Pre-fill as many relevant values as possible to reduce user friction
+- Use cached values when available to maintain consistency across pages
+
+### User experience  
+- Ensure pre-filled values make sense in context (e.g., property price matches the listing)
+- Consider using the referral code to track lead attribution
+
+### Styling
+- Match your brand colors for a cohesive experience
+- Test the tool on both light and dark backgrounds
+- Consider hiding titles if they conflict with your page layout
+
+## Getting help
+
+Have questions about embeddable tools or need assistance with customization? Contact your Perch point of contact who will be able to help you out and answer any questions about implementation and best practices. 

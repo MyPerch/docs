@@ -1,73 +1,108 @@
 ---
-title: "Getting Started"
-description: "Complete API reference and guides for integrating with Perch's digital mortgage platform"
+title: "Introduction"
+description: "Welcome to the Perch Developer Platform - APIs and tools for integrating digital mortgage solutions"
 ---
 
-## Welcome to Perch API Documentation
+# Introduction
 
-Perch provides powerful APIs to help partners integrate with our digital mortgage brokering ecosystem. Whether you're a partner looking to expand your offerings or a realtor wanting to leverage our platform, our APIs provide the tools you need.
+Welcome to the **Perch Developer Platform** — a suite of APIs and tools that enable partners to deliver exceptional digital mortgage experiences for their clients. Our platform is designed to give you secure, programmatic access to key Perch services so you can integrate mortgage workflows directly into your product.
+
+In its simplest form, Perch's Partner API is a realtime gateway that provides partners with a simple way to refer mortgage seekers to Perch and track their progress as they move through the mortgage application lifecycle.
+
+## Why use the API instead of referral links?
+
+Perch has a long-standing referral ecosystem using referral code links and landing pages. While these channels provide reliable lead attribution, they typically yield suboptimal conversion results because they are:
+
+- **Not personalized** to the specific client
+- **Untethered from automation** and integration  
+- **Limited visibility** - partners lack insight into whether leads actually convert
+
+This is where our API transforms the experience. Instead of directing clients to generic landing pages, partners can directly and securely submit client details to Perch, triggering our tailored onboarding experience — a refined combination of automation and customer experience intervention that yields substantially higher funding success rates.
+
+## What the Partner API enables
+
+The **Partner API** allows you to:
+
+1. 🤝 **Submit leads**: Seamlessly hand off your clients to Perch for their mortgage needs
+2. 👀 **Track applications**: Get real-time visibility into the status of your client's mortgage journey  
+3. 🔔 **Receive updates**: Stay in sync as applications move forward, with key event notifications and status changes
+
+### Benefits of programmatic lead submission
+
+By providing client details programmatically, partners can:
+
+- **Personalize the experience** - Client data is pre-populated, reducing friction
+- **Expedite applications** - Clients don't need to re-enter information they've already provided
+- **Dramatically reduce barriers** to lead conversion
+- **Track progress** - Monitor both Lead and Plan status through dedicated endpoints
+- **Increase conversion rates** - Our data shows significantly higher success rates vs traditional referral channels
+
+## Get set up
+
+Use the Partner API in minutes with our step-by-step guides.
 
 <CardGroup cols={2}>
   <Card
-    title="Partner API"
-    icon="users"
-    href="/Partner API"
+    title="Authentication basics"
+    icon="key"
+    href="/getting-started/authentication"
   >
-    Lead management and workflow APIs for Perch partners
+    Understand how authenticating with the Perch Developer Platform works.
   </Card>
   <Card
-    title="Realtor API"  
-    icon="house"
-    href="/Realtor API"
+    title="Making your first lead submission"
+    icon="user-plus"
+    href="/api-reference/submitting-and-tracking-leads"
   >
-    Portal functionality APIs for real estate professionals
+    Start sending clients to Perch programmatically by creating a lead.
+  </Card>
+</CardGroup>
+
+## Learn the fundamentals
+
+Understand the building blocks of the platform.
+
+<CardGroup cols={2}>
+  <Card
+    title="Core concepts: Leads and Plans"
+    icon="lightbulb"
+    href="/core-concepts/leads-and-plans"
+  >
+    Learn about the two most important objects in the Perch Developer Platform.
   </Card>
   <Card
     title="API Overview"
     icon="book"
     href="/getting-started/api-overview"
   >
-    Learn about authentication, concepts, and best practices
-  </Card>
-  <Card
-    title="Support"
-    icon="envelope"
-    href="mailto:support@myperch.io"
-  >
-    Get help from our technical support team
+    Understand authentication, rate limits, error handling, and best practices.
   </Card>
 </CardGroup>
 
-## Getting Started
+## API references
 
-<Steps>
-  <Step title="Read the API Overview">
-    Start with our [API Overview](/getting-started/api-overview) to understand authentication, terms of use, and key concepts.
-  </Step>
-  <Step title="Choose Your API">
-    Select the appropriate API for your use case:
-    - **Partner API**: For lead management and partner workflows
-    - **Realtor API**: For realtor portal functionality
-  </Step>
-  <Step title="Get Your API Key">
-    Contact your Perch representative to obtain API credentials for your integration.
-  </Step>
-  <Step title="Start Building">
-    Use our interactive API playground to test endpoints and build your integration.
-  </Step>
-</Steps>
+Explore all endpoints and functionality in our APIs.
 
-## API Environments
-
-<Note>
-  All APIs are available in both development and production environments with different base URLs.
-</Note>
-
-- **Development**: For testing and development
-- **Production**: For live integrations
+<CardGroup cols={2}>
+  <Card
+    title="Partner API Reference"
+    icon="code"
+    href="/Partner%20API%20Reference"
+  >
+    Complete API documentation for partner integrations, lead management, and workflows.
+  </Card>
+  <Card
+    title="Realtor API Reference"
+    icon="building"
+    href="/Realtor%20API"
+  >
+    API documentation for realtor portal functionality and real estate professional tools.
+  </Card>
+</CardGroup>
 
 ## Need Help?
 
-- **Technical Questions**: Email [support@myperch.io](mailto:support@myperch.io)
+- **Technical Questions**: Email [partnersupport@myperch.io](mailto:partnersupport@myperch.io)
 - **Partnership Inquiries**: Contact your Perch representative
 - **API Access**: Request credentials through your account manager
+

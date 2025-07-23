@@ -1,0 +1,103 @@
+---
+title: "Leads and Plans"
+description: "The two foundational objects that play a critical role in the Partner API"
+---
+
+Understanding how leads and plans work is essential to integrating with the Perch Developer Platform. These are the two foundational objects that represent the lifecycle of a mortgage application — from initial client handoff to final mortgage funding.
+
+## The real-world analogy
+
+Think of a **lead** as a warm introduction — you or your product has identified someone who needs mortgage support, and you're handing them off to Perch to help with their financing needs. Once that lead is accepted and the client agrees to move forward, it becomes a **plan** — the actual mortgage application that our team opens, works on, and helps complete.
+
+These two stages mirror the real-world journey of a client:
+
+1. **Lead submission** → You identify a client who needs mortgage financing
+2. **Lead conversion** → Client signs up with Perch using the same email address  
+3. **Plan creation** → Active mortgage application(s) are opened and tracked
+4. **Plan progression** → Application moves through pre-approval, approval, and funding stages
+
+### Why we modeled it this way
+
+Mortgage applications are complex, dynamic, and timeline-sensitive. We've structured the lead and plan models to reflect how mortgage brokering happens in the real world:
+
+1. **Separation of lead vs plan** helps partners track both pipeline and active applications
+2. **Status-driven lifecycles** allow for clear communication and automation  
+3. **Granular types and transitions** give you transparency and actionable insights throughout the mortgage journey
+
+## Leads
+
+A **lead** is your way of introducing a potential client to Perch. It contains basic information about the client, their financing needs, and any contextual details. Once a lead is submitted, our customer experience team attempts to contact the client, confirm application details, and help them get started with Perch.
+
+Right now, Perch supports accepting leads for different mortgage scenarios:
+1. **Buying** - a purchase where your client is the buyer
+2. **Renewal** - a mortgage renewal for an existing client  
+3. **Refinancing** - a refinance where your client wants to restructure their mortgage
+4. **Switch** - moving from one lender to another
+
+### Lead lifecycle
+
+A lead has a straightforward lifecycle:
+
+1. **Submitted** - The lead has been received and is awaiting contact or qualification
+2. **Converted** - The lead was successful — the client has signed up and plan(s) have been created
+3. **Archived** - The lead is closed without conversion (client chose another provider, transaction cancelled, etc.)
+
+Every lead object returned in the API includes:
+- `convertedAt` - timestamp when the lead converted to a client profile
+- `deletedAt` - timestamp when the lead was archived (set automatically upon conversion)
+- `planIds` - array of plan IDs created when the lead converted (if plan data was included)
+
+<Note>
+For a lead to automatically populate the client's profile, the client must sign up using the **same email address** that was used to create the lead.
+</Note>
+
+## Plans
+
+A plan represents an active mortgage application. This is where real mortgage work happens: income verification, credit checks, pre-approvals, and final approvals. Each plan is handled by our mortgage specialists and tracked within the Perch platform.
+
+Perch supports the same types of plans as lead types, because leads feed into plans:
+- **Buying** - purchase mortgage applications
+- **Renewal** - mortgage renewal applications  
+- **Refinancing** - refinance applications
+- **Switch** - lender transfer applications
+
+### Plan lifecycle
+
+All plans follow a similar progression through the mortgage application process:
+
+1. **New** - Plan has been created but client hasn't completed their profile
+2. **Profiles Completed** - Client information is complete, ready for application  
+3. **Ready for Pre-approval** - Application submitted and ready for initial approval
+4. **Pre-approved** - Initial approval received, property search can begin
+5. **Application in Progress** - Full application submitted to lenders
+6. **Lender Approved** - Final approval received from lender
+7. **Ready to Fund** - All conditions met, ready for funding
+8. **Completed** - Mortgage has been funded successfully
+9. **Closed** - Application was cancelled or fell through
+
+<Warning>
+To protect client privacy, plans created by a client after registration will not automatically be accessible unless you were the original lead owner.
+</Warning>
+
+## The connection
+
+The relationship between leads and plans is straightforward:
+
+1. **You submit a lead** with client details and optional plan information
+2. **Perch contacts the client** to confirm details and help them sign up
+3. **Client registers** using the same email address from the lead
+4. **Lead converts automatically** and plan(s) are created if included in the original lead
+5. **You gain access** to track the plan(s) through their lifecycle as the referring partner
+
+### Benefits of this approach
+
+- **Streamlined onboarding**: Client data is pre-populated, reducing friction
+- **Automatic attribution**: Plans are automatically linked to the referring partner
+- **Real-time tracking**: Monitor progress from lead submission to mortgage funding  
+- **Email notifications**: Get alerts when leads convert and plans reach key milestones
+
+## Ready to go!
+
+By understanding leads and plans, you're equipped to guide your clients through every step of the mortgage journey, while keeping your systems in sync with the work being done by Perch behind the scenes.
+
+Ready to start? Check out our guide on [submitting and tracking leads](/api-reference/submitting-and-tracking-leads) to see these concepts in action. 

@@ -1,0 +1,190 @@
+---
+title: "Rate limits and pagination"
+description: "Understanding rate limiting, pagination, and query parameters in the Perch Partner API"
+---
+
+## Rate limiting
+
+Please take note that requests will be rate limited based on an hourly quota. The quota will allow for burst requests of up to 6x the hourly average quota.
+
+For example, if your quota is 500 requests / hour, then you cannot exceed 50 requests / minute. The hourly quota is rolling, so if you made 500 requests between 07:30 and 07:45, then you must wait until 08:30 before you can continue to use the API.
+
+### Handling rate limits
+
+When you exceed your rate limit, you'll receive a `429 Too Many Requests` response. Implement exponential backoff to handle this gracefully:
+
+```javascript
+async function makeRequestWithRetry(url, options, maxRetries = 3) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      
+      if (response.status === 429) {
+        const retryDelay = Math.pow(2, attempt);
+        await sleep(retryDelay * 1000);
+        continue;
+      }
+      
+      return response;
+    } catch (error) {
+      if (attempt === maxRetries - 1) throw error;
+      await sleep(Math.pow(2, attempt) * 1000);
+    }
+  }
+}
+```
+
+## Pagination
+
+By default, all index (i.e., GET /resources) calls to our API will be paginated. To paginate the API, you can use the `limit` and `offset` query parameters.
+
+### Basic pagination
+
+```http
+GET /firms/abc123/leads?limit=20&offset=40
+```
+
+This would return page 3 with 20 records per page (records 41-60).
+
+### Default behavior
+
+- **Default limit**: 20 records
+- **Maximum limit**: 100 records
+- **Default offset**: 0
+- **Default order**: `['createdAt', 'DESC']` (newest first)
+
+### Pagination response
+
+Paginated responses include metadata to help with navigation:
+
+```json
+{
+  "data": [
+    // ... array of resources
+  ],
+  "meta": {
+    "total": 150,
+    "count": 20,
+    "offset": 40,
+    "limit": 20
+  }
+}
+```
+
+## Query parameters
+
+### Ordering
+
+You can customize the sort order using the `order` parameter:
+
+```http
+GET /firms/abc123/leads?order=[["email", "ASC"]]
+GET /firms/abc123/leads?order=[["createdAt", "DESC"], ["email", "ASC"]]
+```
+
+**Supported directions:**
+- `ASC` - Ascending order
+- `DESC` - Descending order
+
+### Filtering
+
+Use the `filter` parameter to restrict results:
+
+```http
+GET /firms/abc123/leads?filter={"email": "john.doe@example.com"}
+GET /firms/abc123/leads?filter={"firstName": "John", "lastName": "Doe"}
+```
+
+<Note>
+Depending on your HTTP client, you may need to URL encode the JSON filter object.
+</Note>
+
+### Scopes
+
+The Perch API uses scopes to simplify common or complicated queries:
+
+```http
+GET /leads/abc123?scope=withDeleted
+GET /firms/abc123/leads?scope=withDeleted&include=Plans
+```
+
+**Common scopes:**
+- `withDeleted` - Include soft-deleted records
+- `active` - Only active (non-deleted) records
+
+<Warning>
+Not all scopes are available for each resource. Check the specific endpoint documentation for supported scopes.
+</Warning>
+
+### Including related data
+
+Use the `include` parameter to join related resources:
+
+```http
+GET /firms/abc123/leads?include=Plans
+GET /leads/abc123?include=Plans.ClientProfiles
+```
+
+This reduces the number of API calls needed to get complete data.
+
+## Soft deletion
+
+Many resources in our system support soft-deletion, which we call "paranoid" resources. This means that records will not be removed from the database, but instead get a timestamp value set to the record's **`deletedAt`** column.
+
+### Working with soft-deleted records
+
+By default, deleted records are not returned:
+
+```http
+GET /firms/abc123/leads
+// Returns only active leads
+```
+
+To include deleted records, use the `withDeleted` scope:
+
+```http
+GET /firms/abc123/leads?scope=withDeleted
+// Returns both active and deleted leads
+```
+
+### Lead conversion and soft deletion
+
+When a lead converts to a client profile:
+1. The `convertedAt` timestamp is set
+2. The `deletedAt` timestamp is set (automatically archived)
+3. Any associated plans are created and linked
+
+To track converted leads, always use the `withDeleted` scope:
+
+```http
+GET /leads/abc123?scope=withDeleted
+```
+
+## Best practices
+
+1. **Use appropriate page sizes** - Start with the default (20) and adjust based on your needs
+2. **Implement client-side caching** - Cache results to reduce API calls
+3. **Handle rate limits gracefully** - Implement exponential backoff for `429` responses
+4. **Use filters efficiently** - Filter on the server side rather than fetching all records
+5. **Include related data when needed** - Use `include` to reduce round trips
+6. **Monitor rate limit headers** - Track your usage to avoid hitting limits
+
+## Example: Efficient lead fetching
+
+```javascript
+// Fetch recent converted leads with their plans
+const response = await fetch(
+  `/firms/${firmId}/leads?` + new URLSearchParams({
+    scope: 'withDeleted',
+    include: 'Plans',
+    filter: JSON.stringify({ convertedAt: { $ne: null } }),
+    order: JSON.stringify([['convertedAt', 'DESC']]),
+    limit: 50
+  }), {
+    headers: { 'X-API-Key': apiKey }
+  }
+);
+
+const { data: leads, meta } = await response.json();
+console.log(`Found ${meta.total} converted leads`);
+``` 

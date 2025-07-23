@@ -11,20 +11,43 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Get Started",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Welcome",
             "pages": [
               "index",
-              "getting-started/api-overview",
               "getting-started/postman-setup"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "core-concepts/leads-and-plans"
+            ]
+          },
+          {
+            "group": "API Fundamentals",
+            "pages": [
+              "getting-started/api-overview",
+              "getting-started/authentication",
+              "getting-started/errors-and-response-codes",
+              "getting-started/rate-limits-and-pagination",
+              "getting-started/terms-of-use"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "api-reference/submitting-and-tracking-leads"
             ]
           },
           {
             "group": "Embeds",
             "pages": [
               "embeds/overview",
+              "embeds/implementation",
+              "embeds/customization",
               "embeds/demos"
             ]
           }
@@ -32,15 +55,6 @@
       },
       {
         "tab": "Partner API",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "api-reference/overview",
-              "api-reference/submitting-and-tracking-leads"
-            ]
-          }
-        ],
         "openapi": "https://perch-api-docs.s3.ca-central-1.amazonaws.com/perch-partner.spec.json"
       },
       {
@@ -50,11 +64,6 @@
     ],
     "global": {
       "anchors": [
-        {
-          "anchor": "Client Portal",
-          "href": "https://app.myperch.io",
-          "icon": "user"
-        },
         {
           "anchor": "Home",
           "href": "https://myperch.io",
