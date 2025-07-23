@@ -1,90 +1,82 @@
 ---
-title: 'Overview'
-description: 'Learn about Perch embeddable tools and how they can enhance your website with valuable financial calculators and real-time mortgage rates'
+title: 'Embeddable Tools'
+description: 'Live demonstrations and implementation guide for Perch embeddable mortgage calculators, rate displays, and financial tools'
 ---
 
-## Introduction
+Perch's embeddable tools provide valuable financial calculators and real-time mortgage rates directly on your website. Keep visitors engaged while providing helpful mortgage tools that drive conversions.
 
-Perch's **Embeddable Tool Service** opens up a realm of possibilities for our partners by offering a suite of embeddable Perch experiences. These include tools like mortgage calculators, real-time mortgage rates, and more with the goal of adding value to your site by providing your visitors with helpful financial tools, all while keeping them engaged within your domain.
+## Live Demo Experiences
 
-## Benefits of Perch Tools
+<CardGroup cols={2}>
+  <Card
+    title="Live Property Demo"
+    icon="house"
+    href="https://perch-developer-hub.webflow.io/embeds/demo"
+  >
+    Experience Perch embeds in action with a real property listing ($1,397,000 home in Anmore, BC) featuring purchase price qualifiers, mortgage calculators, and real-time rate displays.
+  </Card>
+  
+  <Card
+    title="Tools Showcase"
+    icon="calculator"
+    href="https://perch-developer-hub.webflow.io/embeds/showcase"
+  >
+    Explore the complete collection of embeddable financial tools - mortgage calculators, affordability tools, rate comparisons, and pre-qualification estimators.
+  </Card>
+</CardGroup>
 
-### User Engagement
-- Perch Tools are designed to enhance user experience by providing valuable financial tools and information directly on your site
-- By offering real-time mortgage rates and calculators, you keep your visitors engaged and provide a one-stop solution for their needs
-
-### Professional Appearance
-- Embedding sleek, modern financial tools and experiences lends a professional appearance to your website and reflects well on your brand
-
-### Ease of Integration
-- The simplicity of embedding a Perch Tool—a mere matter of adding a div tag and a script tag—means you can enhance your site's functionality with minimal technical know-how
-
-### Referral Tracking
-- We automatically track user referrals from your embedded tools so that we can provide you (our partners) with referral conversion details
-
-## Available tools
+## Available Tools
 
 ### Mortgage Calculators
-Interactive calculators that help users estimate monthly payments, affordability, and various mortgage scenarios.
+- **Payment Calculator** - Estimate monthly mortgage payments
+- **Affordability Calculator** - Determine maximum home purchase price
+- **Refinance Analyzer** - Compare refinancing options
 
-### Real-Time Mortgage Rates
-Up-to-date mortgage rate displays that keep your visitors informed of current market conditions.
+### Rate Displays
+- **Current Rates** - Real-time mortgage rate information
+- **Rate Comparison** - Compare rates across different terms
 
 ### Pre-qualification Tools
-Help visitors understand what they can afford and guide them toward next steps in their mortgage journey.
+- **Pre-approval Estimator** - Estimate qualification amounts
+- **Purchase Price Qualifier** - Determine affordable price ranges
 
-## How embedding works
+## Implementation
 
-The process of embedding a Perch Tool is straightforward and similar across different platforms. Your Perch representative will provide you with a simple code snippet that you can paste into your website.
-
-### Basic embed structure
-
-Your code snippet will include two parts:
+Each embed uses the same simple two-line integration:
 
 ```html
-<!-- Widget container -->
-<div class="perch-widget" widget-id="YOUR-WIDGET-ID">
-    <div class="perch-widget-loading-indicator">Loading...</div>
+<div class="perch-widget" widget-id="your-widget-id">
+  <div class="perch-widget-loading-indicator">Loading...</div>
 </div>
-
-<!-- Widget script -->
 <script src="https://embeds.myperch.io/assets/perch-embed-widget.js"></script>
 ```
 
 <Warning>
-This is just an example. Your Perch representative will provide your specific widget ID and code.
+Your Perch representative will provide your specific widget ID and customized code.
 </Warning>
 
-### Customization options
+## Key Benefits
 
-Our embeddable tools can be customized to:
-- **Pre-fill data** like property prices, down payments, and other financial information
-- **Match your branding** with custom colors and styling
-- **Track referrals** automatically for lead attribution
+- **Simple Integration** - Just add two lines of HTML to your website
+- **Responsive Design** - Works seamlessly across all devices
+- **Custom Styling** - Match your website's branding and colors
+- **Pre-filled Data** - Populate with property or client-specific information
+- **Automatic Referral Tracking** - We track conversions for lead attribution
+- **Professional Appearance** - Modern financial tools that enhance your brand
 
-Learn more about customization in our [customization guide](/embeds/customization).
+## Getting Started
 
-## Implementation support
+1. **Contact your Perch representative** to discuss available tools and get set up
+2. **Choose the tools** that best fit your audience's needs  
+3. **Receive customized embed codes** with your specific widget IDs
+4. **Follow our guides** for [implementation](/embeds/implementation) and [customization](/embeds/customization)
 
-We provide detailed implementation guides for:
-- **Popular CMS platforms** like WordPress, Webflow, Squarespace
-- **Single Page Applications** like React, Angular, Vue.js
-- **Custom implementations** for unique technical requirements
+<Note>
+Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) to get your production widget IDs and start implementing these tools on your website.
+</Note>
 
-See our [implementation guide](/embeds/implementation) for step-by-step instructions.
+## Next Steps
 
-## Getting started
-
-To implement Perch embeds on your website:
-
-1. **Contact your Perch representative** to discuss available embed options and get set up as a Perch Partner
-2. **Choose the tools** that best fit your audience's needs
-3. **Receive customized embed codes** for your selected tools
-4. **Follow our implementation guides** to add them to your website
-
-## Need help?
-
-For assistance with Perch embeddable tools:
-- Contact your Perch account representative
-- Email [partnersupport@myperch.io](mailto:partnersupport@myperch.io)
-- Visit the [Client Portal](https://app.myperch.io) for additional resources 
+- Review the [Implementation Guide](/embeds/implementation) for platform-specific instructions
+- Explore [Customization Options](/embeds/customization) to match your branding
+- Contact your account representative to get started 

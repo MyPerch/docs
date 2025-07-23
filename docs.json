@@ -48,8 +48,7 @@
             "pages": [
               "embeds/overview",
               "embeds/implementation",
-              "embeds/customization",
-              "embeds/demos"
+              "embeds/customization"
             ]
           }
         ]
