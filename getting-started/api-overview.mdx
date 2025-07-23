@@ -27,14 +27,22 @@ Before using the Perch API, please review our [Terms of Use](/getting-started/te
 
 The Perch API provides separate domains for our different API user roles and use cases. For external use, that is currently limited to our Realtor and Partner APIs. In order to use the correct API, you will only need to select the correct domain:
 
-<div style={{ width: '100%' }}>
-
 | API Type | DIT DOMAIN | PRODUCTION DOMAIN |
 |----------|------------|-------------------|
 | Realtor | api.realtor.dit.myperch.io | api.realtor.myperch.io |
 | Partner | api.partner.dit.myperch.io | api.partner.myperch.io |
 
-</div>
+<style>
+{`
+table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+table th:nth-child(1) { width: 20%; }
+table th:nth-child(2) { width: 40%; }
+table th:nth-child(3) { width: 40%; }
+`}
+</style>
 
 <Note>
 Always start with the DIT (development/sandbox) domain for testing your integration before switching to production.

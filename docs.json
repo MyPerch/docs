@@ -55,11 +55,27 @@
       },
       {
         "tab": "Partner API",
-        "openapi": "https://perch-api-docs.s3.ca-central-1.amazonaws.com/perch-partner.spec.json"
+        "groups": [
+          {
+            "group": "Partner API Reference",
+            "openapi": {
+              "source": "https://perch-api-docs.s3.ca-central-1.amazonaws.com/perch-partner.spec.json",
+              "directory": "partner-api"
+            }
+          }
+        ]
       },
       {
-        "tab": "Realtor API",
-        "openapi": "https://perch-api-docs.s3.ca-central-1.amazonaws.com/perch-realtor.spec.json"
+        "tab": "Realtor API", 
+        "groups": [
+          {
+            "group": "Realtor API Reference",
+            "openapi": {
+              "source": "https://perch-api-docs.s3.ca-central-1.amazonaws.com/perch-realtor.spec.json",
+              "directory": "realtor-api"
+            }
+          }
+        ]
       }
     ],
     "global": {
