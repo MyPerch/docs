@@ -1,44 +1,81 @@
-# Mintlify Starter Kit
+# Perch API Documentation
 
-Use the starter kit to get your docs deployed and ready to customize.
+Comprehensive developer documentation for Perch's API platform and embeddable tools.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+## Overview
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+This documentation covers Perch's complete API ecosystem including:
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+### API References
+- **Partner API** - Integration for mortgage partner platforms
+- **Realtor API** - Real estate professional tools and data access  
+- **Advisor API** - Financial advisor workflow management
+- **Support API** - Customer support and service operations
+- **Tools API** - Embeddable widget and calculator management
+
+### Developer Guides
+- **Getting Started** - Authentication, API fundamentals, and setup
+- **Core Concepts** - Understanding leads, plans, and data relationships
+- **Embeddable Tools** - Mortgage calculators and rate displays for websites
+- **Implementation Guides** - Step-by-step integration instructions
+
+## Quick Links
+
+- **Live Documentation**: [docs.myperch.io](https://docs.myperch.io)
+- **API Specs Viewer**: `redoc.html` (all APIs in tabbed interface)
+- **Demo Tools**: [Perch Developer Hub](https://perch-developer-hub.webflow.io/embeds/demo)
 
 ## Development
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+### Prerequisites
+Install the [Mintlify CLI](https://www.npmjs.com/package/mint):
 
-```
+```bash
 npm i -g mint
 ```
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+### Local Development
+Run the development server from the project root:
 
-```
+```bash
 mint dev
 ```
 
-View your local preview at `http://localhost:3000`.
+View your local preview at `http://localhost:3000`
 
-## Publishing changes
+### Alternative API Viewer
+For a consolidated view of all API specifications, open `redoc.html` in your browser. This provides a tabbed interface for all five Perch APIs using Redoc.
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+## Project Structure
 
-## Need help?
+```
+perch-docs/
+├── getting-started/          # API fundamentals and authentication
+├── core-concepts/           # Leads, plans, and key concepts  
+├── api-reference/          # Auto-generated API references
+├── embeds/                # Embeddable tools documentation
+├── snippets/              # Reusable code examples
+├── docs.json             # Navigation and configuration
+└── redoc.html           # Standalone API specs viewer
+```
 
-### Troubleshooting
+## API Specifications
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+All API specs are hosted on S3 and automatically update:
 
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
-- [Mintlify community](https://mintlify.com/community)
+- `https://perch-api-docs.s3.ca-central-1.amazonaws.com/partner.spec.json`
+- `https://perch-api-docs.s3.ca-central-1.amazonaws.com/realtor.spec.json`  
+- `https://perch-api-docs.s3.ca-central-1.amazonaws.com/advisor.spec.json`
+- `https://perch-api-docs.s3.ca-central-1.amazonaws.com/support.spec.json`
+- `https://perch-api-docs.s3.ca-central-1.amazonaws.com/tools.spec.json`
+
+## Publishing
+
+Changes are automatically deployed to production when pushed to the main branch via Mintlify's GitHub integration.
+
+## Support
+
+- **Developer Support**: [partnersupport@myperch.io](mailto:partnersupport@myperch.io)
+- **Mintlify Issues**: Check CLI version with `mint update`
+- **Documentation Issues**: Ensure `docs.json` is valid and in project root
+
