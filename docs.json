@@ -17,7 +17,6 @@
             "group": "Welcome",
             "pages": [
               "index",
-              "getting-started/postman-setup",
               "getting-started/terms-of-use"
             ]
           },
@@ -32,6 +31,7 @@
             "pages": [
               "getting-started/api-overview",
               "getting-started/authentication",
+              "getting-started/postman-setup",
               "getting-started/errors-and-response-codes",
               "getting-started/rate-limits",
               "getting-started/pagination"

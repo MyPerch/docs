@@ -3,84 +3,99 @@ title: 'Embed Demos'
 description: 'Live demonstrations of Perch embeddable tools including mortgage calculators, rate displays, and more'
 ---
 
-import { PerchEmbed } from '/snippets/perch-embed.jsx';
-
 ## Live Embed Demonstrations
 
 Explore our collection of embeddable financial tools in action. Each demo shows how these tools can seamlessly integrate into your website while providing valuable functionality to your visitors.
 
-## Mortgage Calculator
+## Interactive Demo Experiences
 
-Our interactive mortgage calculator helps users estimate monthly payments, explore different loan scenarios, and understand affordability options.
+<CardGroup cols={2}>
+  <Card
+    title="Live Property Demo"
+    icon="house"
+    href="https://perch-developer-hub.webflow.io/embeds/demo"
+  >
+    Experience Perch embeds in action with a real property listing ($1,397,000 home in Anmore, BC) featuring purchase price qualifiers, mortgage calculators, and real-time rate displays.
+  </Card>
+  
+  <Card
+    title="Tools Showcase"
+    icon="calculator"
+    href="https://perch-developer-hub.webflow.io/embeds/showcase"
+  >
+    Explore the complete collection of embeddable financial tools - mortgage calculators, affordability tools, rate comparisons, and pre-qualification estimators.
+  </Card>
+</CardGroup>
 
-<PerchEmbed widgetId="1CqmKS4y" title="Perch Mortgage Calculator" />
+### What You'll See in the Live Demo
 
----
+The [Property Demo](https://perch-developer-hub.webflow.io/embeds/demo) showcases:
 
-## Mortgage Rate Display
+- **Purchase Price Qualifier** - Interactive tool showing affordability calculations for the $1,397,000 listing
+- **Real-time Rate Loading** - Current mortgage rates from multiple lenders  
+- **Mortgage Payment Calculator** - Monthly payment estimates based on the property price ($1,397,000, 6 beds, 4 baths, 3,890 sqft)
+- **Property-specific Data** - Tools pre-populated with MLS listing details
+- **Responsive Design** - Works seamlessly across desktop, tablet, and mobile devices
 
-Stay up-to-date with current mortgage rates and market conditions.
+## Available Embed Tools
 
-<PerchEmbed widgetId="mhqaKgPZ" height="505px" title="Current Mortgage Rates" />
+### Mortgage Calculators
+- **Payment Calculator** - Estimate monthly mortgage payments
+- **Affordability Calculator** - Determine maximum home purchase price
+- **Refinance Analyzer** - Compare refinancing options
 
----
+### Rate Displays
+- **Current Rates** - Real-time mortgage rate information
+- **Rate Comparison** - Compare rates across different terms
 
-## Affordability Calculator
-
-Help users determine how much home they can afford based on their income, debts, and down payment.
-
-<PerchEmbed widgetId="1yV9SWMk" height="592px" title="Home Affordability Calculator" />
-
----
-
-## Refinance Analysis Tool
-
-Allow visitors to explore refinancing options and potential savings with their current mortgage.
-
-<PerchEmbed widgetId="dNpZU8NF" height="278px" title="Refinance Calculator" />
-
----
-
-## Pre-Approval Estimator
-
-Provide users with an estimate of their pre-approval amount based on their financial information.
-
-<PerchEmbed widgetId="nPaRVto1" height="261px" title="Pre-Approval Estimator" />
+### Pre-qualification Tools
+- **Pre-approval Estimator** - Estimate qualification amounts
+- **Purchase Price Qualifier** - Determine affordable price ranges
 
 ## Implementation
 
-Each embed uses the same simple integration pattern with a unique widget ID:
+Each embed uses the same simple integration pattern:
 
 ```html
 <div class="perch-widget" widget-id="your-widget-id">
-<!-- Replace the inner content with custom loader -->
-<div class="perch-widget-loading-indicator" style="text-align: center;">Loading...</div>
+  <div class="perch-widget-loading-indicator">Loading...</div>
 </div>
 <script src="https://embeds.myperch.io/assets/perch-embed-widget.js"></script>
 ```
 
-## Customization Options
+## Key Features
 
-- **Widget sizing**: Embeds automatically adjust to container width
-- **Loading indicators**: Customizable loading messages and styling
-- **Brand integration**: Tools can be styled to match your website's design
-- **Responsive design**: Works seamlessly across desktop and mobile devices
+### Seamless Integration
+- **Responsive design** - Works across desktop and mobile devices
+- **Custom styling** - Match your website's branding and colors
+- **Pre-filled data** - Populate with property or client-specific information
 
-## Getting Your Widget IDs
+### User Experience
+- **Fast loading** - Optimized for quick page load times
+- **Interactive** - Engaging calculators that provide immediate results
+- **Lead capture** - Built-in conversion paths to mortgage applications
 
-To implement these embeds on your website:
+### Developer-Friendly
+- **Simple setup** - Just add two lines of HTML
+- **Customizable** - Extensive options for styling and data injection
+- **Reliable** - Hosted and maintained by Perch
 
-1. Contact your Perch account representative
-2. Specify which tools you'd like to embed
-3. Receive your custom widget IDs
-4. Implement using the simple HTML code structure shown above
+## Getting Started
+
+To implement Perch embeds on your website:
+
+1. **Contact your Perch representative** to discuss your needs and get access
+2. **Choose your tools** from the available options shown above
+3. **Receive your widget IDs** and any custom styling options
+4. **Implement the code** using our [implementation guide](/embeds/implementation)
+5. **Customize as needed** using our [customization options](/embeds/customization)
 
 <Note>
-Widget IDs shown in these demos are examples. Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) to receive your production widget IDs.
+The demos above show live, working examples of Perch embeddable tools. Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) to get your production widget IDs and start implementing these tools on your website.
 </Note>
 
 ## Next Steps
 
-- Review the [Embeds Overview](/embeds/overview) for more information
-- Contact your account representative to get started
-- Explore the [API documentation](/api-reference/overview) for additional integration options 
+- Review the [Implementation Guide](/embeds/implementation) for detailed setup instructions
+- Explore [Customization Options](/embeds/customization) to match your branding
+- Contact your account representative to get started with your specific use case 
