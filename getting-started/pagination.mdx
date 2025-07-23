@@ -1,38 +1,7 @@
 ---
-title: "Rate limits and pagination"
-description: "Understanding rate limiting, pagination, and query parameters in the Perch Partner API"
+title: "Pagination and query parameters"
+description: "Understanding pagination, filtering, ordering, and query parameters in the Perch Partner API"
 ---
-
-## Rate limiting
-
-Please take note that requests will be rate limited based on an hourly quota. The quota will allow for burst requests of up to 6x the hourly average quota.
-
-For example, if your quota is 500 requests / hour, then you cannot exceed 50 requests / minute. The hourly quota is rolling, so if you made 500 requests between 07:30 and 07:45, then you must wait until 08:30 before you can continue to use the API.
-
-### Handling rate limits
-
-When you exceed your rate limit, you'll receive a `429 Too Many Requests` response. Implement exponential backoff to handle this gracefully:
-
-```javascript
-async function makeRequestWithRetry(url, options, maxRetries = 3) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, options);
-      
-      if (response.status === 429) {
-        const retryDelay = Math.pow(2, attempt);
-        await sleep(retryDelay * 1000);
-        continue;
-      }
-      
-      return response;
-    } catch (error) {
-      if (attempt === maxRetries - 1) throw error;
-      await sleep(Math.pow(2, attempt) * 1000);
-    }
-  }
-}
-```
 
 ## Pagination
 
@@ -164,12 +133,32 @@ GET /leads/abc123?scope=withDeleted
 
 1. **Use appropriate page sizes** - Start with the default (20) and adjust based on your needs
 2. **Implement client-side caching** - Cache results to reduce API calls
-3. **Handle rate limits gracefully** - Implement exponential backoff for `429` responses
-4. **Use filters efficiently** - Filter on the server side rather than fetching all records
-5. **Include related data when needed** - Use `include` to reduce round trips
-6. **Monitor rate limit headers** - Track your usage to avoid hitting limits
+3. **Use filters efficiently** - Filter on the server side rather than fetching all records
+4. **Include related data when needed** - Use `include` to reduce round trips
+5. **Handle large datasets** - Use pagination rather than trying to fetch all records at once
+6. **Combine parameters effectively** - Use filtering, ordering, and pagination together
 
-## Example: Efficient lead fetching
+## Advanced pagination patterns
+
+### Cursor-based pagination alternative
+
+While Perch uses offset-based pagination, you can simulate cursor-based pagination using ordering and filtering:
+
+```javascript
+// Get first page
+let lastCreatedAt = null;
+const firstPage = await fetch('/leads?order=[["createdAt","DESC"]]&limit=20');
+
+// Get next page using the last item's timestamp
+if (firstPage.data.length > 0) {
+  lastCreatedAt = firstPage.data[firstPage.data.length - 1].createdAt;
+  const nextPage = await fetch(
+    `/leads?order=[["createdAt","DESC"]]&limit=20&filter={"createdAt":{"$lt":"${lastCreatedAt}"}}`
+  );
+}
+```
+
+### Efficient lead fetching example
 
 ```javascript
 // Fetch recent converted leads with their plans
@@ -187,4 +176,35 @@ const response = await fetch(
 
 const { data: leads, meta } = await response.json();
 console.log(`Found ${meta.total} converted leads`);
+```
+
+### Working with large datasets
+
+```javascript
+async function fetchAllLeads(firmId) {
+  let allLeads = [];
+  let offset = 0;
+  const limit = 100; // Use maximum page size for efficiency
+  
+  while (true) {
+    const response = await fetch(
+      `/firms/${firmId}/leads?limit=${limit}&offset=${offset}&scope=withDeleted`
+    );
+    const { data: leads, meta } = await response.json();
+    
+    allLeads = allLeads.concat(leads);
+    
+    // Check if we've fetched all records
+    if (leads.length < limit || offset + limit >= meta.total) {
+      break;
+    }
+    
+    offset += limit;
+    
+    // Add delay to respect rate limits
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  
+  return allLeads;
+}
 ``` 

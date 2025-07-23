@@ -1,0 +1,78 @@
+---
+title: "Rate limits"
+description: "Understanding rate limiting policies and best practices for the Perch Partner API"
+---
+
+## Rate limiting
+
+Please take note that requests will be rate limited based on an hourly quota. The quota will allow for burst requests of up to 6x the hourly average quota.
+
+For example, if your quota is 500 requests / hour, then you cannot exceed 50 requests / minute. The hourly quota is rolling, so if you made 500 requests between 07:30 and 07:45, then you must wait until 08:30 before you can continue to use the API.
+
+## Handling rate limits
+
+When you exceed your rate limit, you'll receive a `429 Too Many Requests` response. Implement exponential backoff to handle this gracefully:
+
+```javascript
+async function makeRequestWithRetry(url, options, maxRetries = 3) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      
+      if (response.status === 429) {
+        const retryDelay = Math.pow(2, attempt);
+        await sleep(retryDelay * 1000);
+        continue;
+      }
+      
+      return response;
+    } catch (error) {
+      if (attempt === maxRetries - 1) throw error;
+      await sleep(Math.pow(2, attempt) * 1000);
+    }
+  }
+}
+```
+
+## Best practices for rate limiting
+
+1. **Implement exponential backoff** - Start with a 1-second delay and double it with each retry
+2. **Respect the rolling window** - Track your request timing to avoid hitting limits
+3. **Cache responses** where appropriate to reduce API calls
+4. **Batch operations** when possible instead of making many individual requests
+5. **Monitor for `429` responses** and adjust your request frequency accordingly
+
+## Understanding your quota
+
+Your specific rate limit depends on your partnership agreement and use case. Common quotas include:
+
+- **Sandbox environment**: Lower limits for testing (typically 100-200 requests/hour)
+- **Production environment**: Higher limits based on your integration needs
+- **Burst allowance**: Up to 6x your hourly average in a short period
+
+If you need higher rate limits for your integration, contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) to discuss your requirements.
+
+## Rate limiting scenarios
+
+### Normal usage
+```javascript
+// Making requests within limits
+for (let i = 0; i < 10; i++) {
+  const response = await makeRequest(`/leads/${leadIds[i]}`);
+  // Process response
+}
+```
+
+### Handling rate limit exceeded
+```javascript
+// Proper error handling for rate limits
+try {
+  const response = await makeRequest('/leads');
+} catch (error) {
+  if (error.status === 429) {
+    console.log('Rate limit exceeded, waiting before retry...');
+    await new Promise(resolve => setTimeout(resolve, 60000)); // Wait 1 minute
+    // Retry the request
+  }
+}
+``` 
