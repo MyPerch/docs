@@ -48,7 +48,9 @@
             "pages": [
               "embeds/overview",
               "embeds/implementation",
-              "embeds/customization"
+              "embeds/customization",
+              "embeds/authenticated-embeds",
+              "embeds/lead-management"
             ]
           }
         ]
