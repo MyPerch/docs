@@ -28,17 +28,19 @@ This documentation covers Perch's complete API ecosystem including:
 ## Development
 
 ### Prerequisites
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint):
+Install the [Mintlify CLI](https://www.npmjs.com/package/mint) locally in the project:
 
 ```bash
-npm i -g mint
+npm install
 ```
+
+This will install all dependencies, including the Mintlify CLI.
 
 ### Local Development
 Run the development server from the project root:
 
 ```bash
-mint dev
+npx mint dev
 ```
 
 View your local preview at `http://localhost:3000`
