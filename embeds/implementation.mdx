@@ -7,11 +7,11 @@ This guide walks through the process of implementing Perch embeddable tools on v
 
 ## Basic embed code structure
 
-Your Perch representative will provide you with a code snippet that looks similar to this:
+All Perch widgets use the same simple two-line integration. The widget ID will either be provided by your Perch representative (for custom configurations) or you can use one of the predefined static widget IDs for Lead Management:
 
 ```html
 <!-- DIV PORTION -->
-<div class="perch-widget" widget-id="ABC123">
+<div class="perch-widget" widget-id="your-widget-id">
     <div class="perch-widget-loading-indicator">Loading...</div>
 </div>
 
@@ -19,16 +19,9 @@ Your Perch representative will provide you with a code snippet that looks simila
 <script src="https://embeds.myperch.io/assets/perch-embed-widget.js"></script>
 ```
 
-<Warning>
-Please do not use this code, it is simply an example. Your Perch representative will provide your specific widget ID and code.
-</Warning>
-
-### Code breakdown
-
-Let's break down the code snippet:
-
-1. **The `<div>` tag** denotes the location where the tool will appear on your page. You can place this anywhere in your page.
-2. **The `<script>` tag** loads the JavaScript that will automatically replace the `<div>` with the expected widget.
+**Widget ID Options:**
+- **Custom widgets**: Your Perch representative provides a specific widget ID (e.g., `ABC123`)
+- **Static Lead Management widgets**: Use predefined IDs following `static-{portal}-{parent}` format (see [Widget Embedding](/embeds/lead-management#widget-embedding) for all available IDs)
 
 ### Custom loading indicator
 
@@ -46,8 +39,10 @@ You can replace the contents of this `<div>` with a custom message or a loading 
 ```
 
 <Info>
-Be sure that you retain the `.perch-widget-loading-indicator` class as this is what our script looks for when removing the loading indicator.
+Be sure that you retain the `.perch-widget-loading-indicator` class as this is what our script looks for when removing the loading indicator upon successful initialization of your widget.
 </Info>
+
+---
 
 ## CMS-specific instructions
 

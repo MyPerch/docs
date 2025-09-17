@@ -53,11 +53,13 @@ Learn more about how Leads and Plans interact in our [Leads and Plans](/core-con
 
 ---
 
-## Static Embed Deployments
+## Static Widget Implementation
 
-We've created static versions of the Lead Management embed for quick deployment:
+We've implemented a new static widget system that provides simplified integration for Lead Management embeds using predefined identifiers. This offers two deployment options: **direct URL access** or **embedded widget integration**.
 
-**Pre-configured embed URLs:**
+### Direct URL Access
+
+**Pre-configured embed URLs for immediate use:**
 
 - **For Brokerage Managers:**  
   https://embeds.myperch.io/static/realtor/firm  
@@ -68,6 +70,15 @@ We've created static versions of the Lead Management embed for quick deployment:
 - **Form Submitters (Team Members):**  
   https://embeds.myperch.io/static/partner/firm-member
 
+### Widget Embedding
+
+For website integration, use static widget IDs with the [embed code structure](/embeds/implementation#basic-embed-code-structure):
+
+**Available static widget IDs:**
+- `static-partner-firm` - Partner firm-level lead management
+- `static-partner-firm-member` - Individual partner member lead management  
+- `static-realtor-firm` - Realtor firm-level lead management
+- `static-realtor-firm-member` - Individual realtor member lead management
 ---
 
 ## Using the Lead Management Embed
