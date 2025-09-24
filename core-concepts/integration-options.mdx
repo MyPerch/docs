@@ -1,0 +1,233 @@
+---
+title: "Integration Options"
+description: "Choose the right integration approach based on your business needs and technical requirements"
+---
+
+Perch offers three integration options, each designed for different partner needs and technical capabilities. Choose the approach that best fits your business model and requirements.
+
+## Integration Options Overview
+
+<CardGroup cols={3}>
+  <Card
+    title="Referrals & Widgets"
+    icon="browsers"
+    href="#referrals--widgets"
+  >
+    
+    **Aggregate Reporting**
+    
+    Good for partners who want to earn commissions, but don't need intimate insights into progress and tracking.
+  </Card>
+  <Card
+    title="Lead Tools"
+    icon="laptop-code"
+    href="#lead-tools"
+  >
+    
+    **Medium Control + Insights**
+    
+    Good for non-technical partners who need deeper insights into client progress.
+  </Card>
+  <Card
+    title="API Integration"
+    icon="code"
+    href="#api-integration"
+  >
+    
+    **Full Control + Insights**
+    
+    Good for technical partners who need deeper insights and want full control over their client experience.
+  </Card>
+</CardGroup>
+
+---
+
+## Referrals & Widgets
+`Aggregate Reporting`
+
+Share your public **Referral Link** on your website, social media, in your email signature, etc. or drive traffic by embedding one of Perch's [embeddable tools](/embeds/overview) on your website to generate leads and earn a commission on each funded deal.
+
+<Tip>
+**Best for:** Partners who want to earn commissions, but don't need intimate insights into client deal progress and tracking.
+</Tip>
+
+### How It Works
+
+<Steps>
+  <Step title="Drive Traffic">
+    Referral Links & Widgets redirect users to Perch's signup page with your referral code
+  </Step>
+  <Step title="Client Signs Up">
+    Users sign up and are automatically tagged with your referral attribution (you're notified via email)
+  </Step>
+  <Step title="Earn Commission">
+    Perch pays a commission on each funded deal
+  </Step>
+</Steps>
+
+### Data Access Capabilities
+- **Aggregate reporting only** - conversion emails and referral counts
+- **No client PII access** - you cannot see individual client details
+
+### Why Limited Access?
+When users simply click through widgets or referral links, there's no established data sharing relationship. The client hasn't explicitly consented to share their personal information with the referring partner beyond basic attribution.
+
+### Getting Started
+- Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) to get your referral code
+- Explore available [embeddable widgets](/embeds/overview) for your website
+- Implement widgets following our [implementation guide](/embeds/implementation)
+
+---
+
+## Lead Submission Tool
+`Light Reporting, Control & Insights`
+
+Perch's Lead Submission tools can be access directly or embedded into your CRM for a more seamless submission experience.
+
+<Tip>
+**Best for:** Non-technical partners who need deeper insights into client progress.
+</Tip>
+
+### How It Works
+- Submit leads through [authenticated embeds](/embeds/authenticated-embeds) (lead management tools)
+- Embed lead submission widgets directly into your CRM or website
+- Provide client details and consent for data sharing
+- Establish a direct relationship between your firm and the client's application
+- Access detailed progress tracking for submitted leads
+
+### Data Access Capabilities
+- **Full lead tracking** - monitor conversion from referral to funding
+- **Application status visibility** - see where clients are in the mortgage process
+- **Plan details access** - view pre-approval amounts, application stages
+- **Client PII for submitted leads** - access information for leads you created
+- **Email notifications** - get alerts when leads convert and reach milestones
+
+### The Key Difference
+By submitting structured lead data, you're establishing a legitimate business relationship that justifies access to client information. You "own" the leads you submit, creating the foundation for ongoing data sharing.
+
+### Available Tools
+- **Lead Management Embeds** - [authenticated widgets](/embeds/lead-management) that can be embedded in your CRM or website
+- **Lead Submission Portal** - web-based interface for manual lead entry
+- **CRM Integration** - embed widgets directly into your existing CRM system
+- **Zapier Integration** - automated lead submission from your existing systems (submission only; use lead tracking widgets or API for reporting)
+
+### Getting Started
+- Learn about [authenticated embeds](/embeds/authenticated-embeds) and available configurations
+- Review the [embeds section](/embeds/overview) to understand how to embed widgets into your CRM
+- Contact your Perch representative to set up lead management tools
+- Review the [lead management guide](/embeds/lead-management) for implementation details
+- For Zapier setup, contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io)
+
+---
+
+## API Integration
+`Deep Reporting, Control & Insight`
+
+Use our direct API integration for full control over you client and lead submission experience.
+
+<Tip>
+**Best for:** Technical partners who need deeper insights and want full control over their client experience.
+</Tip>
+
+### How It Works
+- Direct API integration for [lead submission and tracking](/api-reference/submitting-and-tracking-leads)
+- Programmatic access to all lead and plan data
+- Real-time status updates
+- Custom workflows and automation
+
+### Data Access Capabilities
+- **Complete API access** - full CRUD on Leads and R on associated Plans
+- **Comprehensive reporting** - access to all data points and metrics
+- **Custom integrations** - build tailored workflows for your business needs
+- **Bulk operations** - efficiently manage large volumes of leads
+
+### Reporting Flexibility
+Partners using API integration can access their data through:
+- **Direct API calls** - programmatic access to all endpoints
+- **Lead management tools** - web interface showing API-submitted leads
+- **Custom dashboards** - build your own reporting interfaces
+- **Webhook notifications** - real-time updates pushed to your systems
+
+### Technical Requirements
+- API credentials (provided by Perch)
+- Development resources for integration
+- Understanding of [authentication](/getting-started/authentication) and [API fundamentals](/getting-started/api-overview)
+
+### Getting Started
+- Review [API authentication](/getting-started/authentication) requirements
+- Explore the [lead submission guide](/api-reference/submitting-and-tracking-leads)
+- Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) for API credentials
+- For automated lead submission without full API development, consider Zapier (contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io))
+
+
+---
+
+## Access Policies & Privacy Protection
+
+### Lead Ownership Model
+Our data access policies are built around a simple ownership model:
+
+1. **You submit a lead** → **You own the relationship** → **You get access to the data**
+2. **You provide a referral link** → **No ownership established** → **Limited to aggregate reporting**
+
+### Privacy Boundaries
+- **PII Protection**: Client personally identifiable information is only shared when there's an established business relationship through lead submission
+- **Retroactive Access**: Plans created by clients after signup (without lead submission) remain private unless manually linked by Perch support
+- **Consent-Based Sharing**: All data sharing is based on the initial consent established through lead submission
+
+### Why We Can't Share All Referral Data
+While it might seem logical that referring a client should grant full data access, privacy regulations and client expectations require explicit consent for data sharing. Simply clicking a referral link doesn't establish this consent—submitting a structured lead with client details does.
+
+---
+
+## Choosing Your Integration Option
+
+### Ask Yourself:
+1. **Do you need detailed client information and application status?**
+   - Yes → Medium or High Integration
+   - No → Low Integration may be sufficient
+
+2. **Do you have technical resources for API integration?**
+   - Yes → Consider High Integration for maximum flexibility
+   - No → Medium Integration provides great capability without development
+
+3. **Is your business model commission-based or service-dependent?**
+   - Commission-based → Low Integration may meet your needs
+   - Service-dependent → You likely need Medium or High Integration
+
+### Migration Path
+You can always start with a lower integration option and upgrade:
+- **Low → Medium**: Begin submitting leads through our tools
+- **Medium → High**: Add API integration while keeping existing lead tools
+- **Any Level**: Add referral widgets alongside other integration methods
+
+---
+
+## Summary
+
+| Integration Option | Data Access | Client PII | Application Status | Technical Requirements |
+|------------------|-------------|------------|-------------------|----------------------|
+| **Referrals & Widgets** | Aggregate only | ❌ No | ❌ No | Minimal |
+| **Perch Tools** | Submitted leads only | ✅ Yes | ✅ Yes | None |
+| **API Integration** | Full programmatic | ✅ Yes | ✅ Yes | Development |
+
+Choose the option that matches your business needs and technical capabilities. You can always upgrade as your requirements evolve.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Understand Leads & Plans"
+    icon="lightbulb"
+    href="/core-concepts/leads-and-plans"
+  >
+    Learn about the foundational objects that power the Perch platform.
+  </Card>
+  <Card
+    title="Start with Lead Submission"
+    icon="user-plus"
+    href="/api-reference/submitting-and-tracking-leads"
+  >
+    Begin your integration journey with structured lead submission.
+  </Card>
+</CardGroup>

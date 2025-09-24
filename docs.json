@@ -23,6 +23,7 @@
           {
             "group": "Core Concepts",
             "pages": [
+              "core-concepts/integration-options",
               "core-concepts/leads-and-plans"
             ]
           },
@@ -38,7 +39,7 @@
             ]
           },
           {
-            "group": "Guides",
+            "group": "API Guides",
             "pages": [
               "api-reference/submitting-and-tracking-leads"
             ]
