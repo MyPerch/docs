@@ -17,13 +17,13 @@
             "group": "Welcome",
             "pages": [
               "index",
+              "getting-started/integration-options",
               "getting-started/terms-of-use"
             ]
           },
           {
             "group": "Core Concepts",
             "pages": [
-              "core-concepts/integration-options",
               "core-concepts/leads-and-plans"
             ]
           },
