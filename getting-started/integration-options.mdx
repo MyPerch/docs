@@ -1,9 +1,11 @@
 ---
 title: "Integration Options"
-description: "Perch offers three integration options, each designed for different partner needs and technical capabilities. Choose the approach that best fits your business model and requirements"
+description: "Choose from Perch's three core integration models - from simple referrals to full API control."
 ---
 
-Perch offers three integration options, each designed for different partner needs and technical capabilities. Choose the approach that best fits your business model and requirements. Before choosing your integration options it may be beneficial to learn about how Perch has structured our [core API resources (Leads & Plans)](/core-concepts/leads-and-plans) to help facilitate your decision.
+Perch offers three core integration models, grouped by reporting capabilities and technical requirements. These models help partners understand the trade-offs between simplicity and control, with each offering progressively deeper insights into client mortgage journeys. While partners can combine approaches or customize beyond these models, these represent our primary integration paradigms. Choose the model that best fits your business needs and technical capabilities.
+
+Before choosing your integration option, it may be beneficial to learn about how Perch has structured our [core API resources (Leads & Plans)](/core-concepts/leads-and-plans) to help facilitate your decision.
 
 ## Integration Options Overview
 
@@ -16,12 +18,12 @@ Perch offers three integration options, each designed for different partner need
     
     **Aggregate Reporting**
     
-    best for partners who want to earn commissions, but don't need intimate insights into progress and tracking.
+    Best for partners who want to earn commissions, but don't need intimate insights into progress and tracking.
   </Card>
   <Card
-    title="Lead Tools"
+    title="Lead Management"
     icon="laptop-code"
-    href="#lead-submission-tool"
+    href="#lead-management-tools"
   >
     
     **Medium Control + Insights**
@@ -45,7 +47,7 @@ Perch offers three integration options, each designed for different partner need
 ## Referrals & Widgets
 `Aggregate Reporting`
 
-Drive referrals to Perch by sharing your **Referral Link** on your website, social media, in your email signature, etc. or by embedding one of Perch's [embeddable tools](/embeds/overview) and earn a commission on each funded deal.
+Drive referrals to Perch by sharing your **Referral Link** on your website, social media, in your email signature, etc., or by embedding one of Perch's [embeddable tools](/embeds/overview) to earn a commission on each funded deal.
 
 <Tip>
 **Best for:** Partners who want to earn commissions, but don't need intimate insights into client deal progress and tracking.
@@ -55,10 +57,10 @@ Drive referrals to Perch by sharing your **Referral Link** on your website, soci
 
 <Steps>
   <Step title="Drive Traffic">
-    Referral Links & Widgets direct users to Perch's customizable [sign-up page](https://app.myperch.io/auth/sign-up?referralCode=EXAMPLE) with your referral code, company logo (or photo) and a customizable welcome message.
+    Referral Links & Widgets direct users to Perch's customizable [signup page](https://app.myperch.io/auth/sign-up?referralCode=EXAMPLE) with your referral code, company logo (or photo), and a customizable welcome message.
   </Step>
   <Step title="Client Signs Up">
-    Users sign up and are automatically tagged with your referral attribution. You're notified via email when a client signs up and when their deal funds. In addition to email alerts you can also track your referrals [via API](/getting-started/api-overview) and through our [lead submission tools](/embeds/lead-management).
+    Users sign up and are automatically tagged with your referral attribution. You're notified via email when a client signs up and when their deal funds. In addition to email alerts, you can also track your referrals [via API](/getting-started/api-overview) and through our [lead submission tools](/embeds/lead-management).
     <Frame caption="Referral Tracking Tool - List deals where you're tagged as the referral source (no PII)">
       <img src="/images/referral-tracking-list.png" alt="Screenshot of the referral tracking tool" />
     </Frame>
@@ -83,10 +85,10 @@ When users simply click through widgets or referral links, there's no establishe
 
 ---
 
-## Lead Submission Tool
+## Lead Management Tools
 `Light Reporting, Control & Insights`
 
-Perch's Lead Submission tools can be [accessed via url](/embeds/lead-management) or [embedded directly](/embeds/implementation) into your CRM for a more seamless submission experience.
+Perch's Lead Submission tools can be [accessed via URL](/embeds/lead-management) or [embedded directly](/embeds/implementation) into your CRM for a more seamless submission experience.
 
 <Tip>
 **Best for:** Non-technical partners who need deeper insights into client deal progress.
@@ -126,7 +128,7 @@ Perch's Lead Submission tools can be [accessed via url](/embeds/lead-management)
 
 ### Getting Started
 - Review our [lead management tool guide](/embeds/lead-management) for implementation details
-- Read about [embeds](/embeds/overview) to explore how you can to embed our tools into your CRM
+- Read about [embeds](/embeds/overview) to explore how you can embed our tools into your CRM
 - Contact your Perch representative to set up custom or branded versions of lead management tools
 
 ---
@@ -134,7 +136,7 @@ Perch's Lead Submission tools can be [accessed via url](/embeds/lead-management)
 ## API Integration
 `Deep Reporting, Control & Insight`
 
-Our direct API integration gives you full control over your lead submission and monitoring experience. Unlike simpler integration options, the API allows you to submit a complete client profile including items like assets, debts, residence history, employment details, and more - helping your clients expedite their mortgage journey to get pre-approved faster.
+Our direct API integration gives you full control over your lead submission and monitoring experience. Unlike simpler integration options, the API allows you to submit a complete client profile including items like assets, debts, residence history, employment details, and more—helping your clients expedite their mortgage journey to get pre-approved faster.
 
 <Tip>
 **Best for:** Technical partners who need deeper insights and want full control over their client experience. Check out our [quick-start guide](/api-reference/submitting-and-tracking-leads) to learn how to submit and track leads through the Perch API.
@@ -145,9 +147,6 @@ Our direct API integration gives you full control over your lead submission and 
 <Steps>
   <Step title="Integrate Platform">
     Integrate your platform with Perch's API through a direct code integration or via Zapier
-    <Info>
-    **Note:** Zapier integration enables one-way lead submission from your Zapier-compatible CRM to Perch. Contact your Perch representative to request access to our lead submission Zap.
-    </Info>
   </Step>
   <Step title="Track Leads">
     Use our `/leads` endpoint to track leads, make updates and monitor for conversion (sign-up)
@@ -168,23 +167,22 @@ Our direct API integration gives you full control over your lead submission and 
 - **Custom integrations** - build tailored workflows for your business needs
 - **Bulk operations** - efficiently manage large volumes of leads
 
-### Reporting Flexibility
-Partners using API integration can access their data through:
-- **Direct API calls** - programmatic access to all endpoints
-- **Lead management tools** - web interface showing API-submitted leads
-- **Custom dashboards** - build your own reporting interfaces
-- **Webhook notifications** - real-time updates pushed to your systems
+### Zapier Integration
+Perch's Zapier integration (available via invite only) enables automated lead submission from your Zapier-compatible CRM systems directly to our platform. Use Zapier's visual workflow builder to create automated workflows that sync leads without writing any code, while maintaining full access to Perch's lead tracking and management tools.
 
-### Technical Requirements
-- API credentials (provided by Perch)
-- Development resources for integration
-- Understanding of [authentication](/getting-started/authentication) and [API fundamentals](/getting-started/api-overview)
+<Frame caption="Zapier Workflow - Automated lead submission from CRM to Perch">
+  <img src="/images/lead-submission-zapier.png" alt="Screenshot showing Zapier workflow connecting CRM to Perch API for automated lead submission" />
+</Frame>
+
+
+<Info>
+**Note:** Zapier integration enables one-way lead submission from your Zapier-compatible CRM to Perch. Contact your Perch representative to request access to our lead submission Zap.
+</Info>
 
 ### Getting Started
 - Review [API authentication](/getting-started/authentication) requirements
 - Explore the [lead submission guide](/api-reference/submitting-and-tracking-leads)
-- Contact your Perch representative for API credentials or book an API demo
-- For automated lead submission without full API development, consider our Zapier integration
+- Contact your Perch representative for API credentials access to our Zaiper integration or book an API discussion with our integration team
 
 ---
 
@@ -217,7 +215,7 @@ You can always start with a lower integration option and upgrade:
 Our data access policies are built around a simple ownership model:
 
 1. **You submit a lead** → **You own the relationship** → **You'll maintain access to the data**
-2. **You provide a referral link** → **No ownership established** → **Limited to aggregate reporting**
+2. **You deployed a referral link** → **No ownership established** → **Limited to aggregate reporting**
 
 ### Privacy Boundaries
 - **PII Protection**: Client personally identifiable information is only shared when there's an established business relationship through lead submission
@@ -232,7 +230,7 @@ While it might seem logical that referring a client should grant full data acces
 
 ## Summary
 
-| Integration Option | Data Access | Client Name | Application Status | Technical Requirements |
+| Integration Option | Data Access | Client PII | Application Status | Technical Requirements |
 |------------------|-------------|------------|-------------------|----------------------|
 | **Referrals & Widgets** | Aggregate only | ❌ No | ❌ No | Minimal |
 | **Perch Tools** | Submitted leads only | ✅ Yes | ✅ Yes | None |
@@ -247,6 +245,7 @@ Choose the option that matches your business needs and technical capabilities. Y
     title="Understand Leads & Plans"
     icon="lightbulb"
     href="/core-concepts/leads-and-plans"
+    arrow="true"
   >
     Learn about the foundational objects that power the Perch platform.
   </Card>
@@ -254,6 +253,7 @@ Choose the option that matches your business needs and technical capabilities. Y
     title="Start with Lead Submission"
     icon="user-plus"
     href="/api-reference/submitting-and-tracking-leads"
+    arrow="true"
   >
     Begin your integration journey with structured lead submission.
   </Card>
