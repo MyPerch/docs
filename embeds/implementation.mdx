@@ -23,6 +23,10 @@ All Perch widgets use the same simple two-line integration. The widget ID will e
 - **Custom widgets**: Your Perch representative provides a specific widget ID (e.g., `ABC123`)
 - **Static Lead Management widgets**: Use predefined IDs following `static-{portal}-{parent}` format (see [Widget Embedding](/embeds/lead-management#widget-embedding) for all available IDs)
 
+<Info>
+The Perch widget script is only 1KB in size, ensuring minimal impact on your page load performance.
+</Info>
+
 ### Custom loading indicator
 
 To improve the client user experience, we've added a feature to provide a custom loading indicator. You can use the inner `<div>` with the class `.perch-widget-loading-indicator` to insert a plain text loader (e.g. 'Loading...') that will be visible while the tool is being downloaded and rendered.
@@ -104,34 +108,121 @@ Perch Widgets can be easily integrated into single-page applications (SPAs) like
 
 ### Why manual initialization is needed
 
-In a traditional setup, the widget script relies on the DOM ready event to initialize. But in SPAs, the DOM is often dynamically updated, and elements containing the widget may not be available at the traditional DOM ready event.
+In a traditional setup, the widget script relies on the DOM ready event to initialize. But in SPAs, the DOM is often dynamically updated, and elements containing the widget may not be available at the traditional DOM ready event. To support dynamic rendering in SPAs, we've added a custom event emitter that allows you to manually trigger widget initialization whenever your components mount.
 
 ### Steps to initialize a widget in an SPA
 
-1. **Insert the widget into your HTML** as you normally would
-2. **Listen for the appropriate lifecycle hook** in your framework that guarantees the element containing the widget is present in the DOM
-3. **Emit the Perch widget initialization event** once the widget's DOM element is available
+1. **Load the Perch widget script** - Choose one of two approaches:
+   - **Static approach**: Add the script tag to your main HTML file (e.g., `index.html`)
+   - **Dynamic approach**: Load the script programmatically in your component code
+2. **Insert the widget div into your HTML** where you want it to appear
+3. **Listen for the appropriate lifecycle hook** in your framework that guarantees the element containing the widget is present in the DOM
+4. **Emit the Perch widget initialization event** once the widget's DOM element is available
 
-#### Basic initialization code
+### Basic examples
+
+<Tabs>
+<Tab title="Static Loading">
+Add the script tag to your main HTML file. This ensures the script is available immediately:
+
+```html index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Your App</title>
+  <script src="https://embeds.myperch.io/assets/perch-embed-widget.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
+```
+
+Add the widget div where you want it to appear:
+
+```html
+<div class="perch-widget" widget-id="your-widget-id">
+  <div class="perch-widget-loading-indicator">Loading...</div>
+</div>
+```
+
+When using this approach, your initialization function only needs to emit the event:
 
 ```javascript
-// Set the widget ID for the Perch widget
-var widgetId = "abc123";
+function initializePerchWidget(widgetId) {
+  const event = new CustomEvent('perch-widget:init', {
+    detail: {
+      perchWidgetId: widgetId
+    }
+  });
+  window.dispatchEvent(event);
+}
 
-// Create a custom event that signals the Perch widget to initialize
-const event = new CustomEvent('perch-widget:init', {
-  detail: {
-    perchWidgetId: widgetId
-  }
-});
-
-// Dispatch the event on the window object
-window.dispatchEvent(event);
+// Call this after the widget div is added to the page
+initializePerchWidget('your-widget-id');
 ```
+</Tab>
+
+<Tab title="Dynamic Loading">
+Load the script programmatically in your component code. This is useful if you want to load the script only when needed.
+
+First, add the widget div where you want it to appear:
+
+```html
+<div class="perch-widget" widget-id="your-widget-id">
+  <div class="perch-widget-loading-indicator">Loading...</div>
+</div>
+```
+
+Then use this function to load the script and initialize the widget:
+
+```javascript
+function initializePerchWidget(widgetId) {
+  // Helper function to emit the initialization event
+  function emitInitEvent() {
+    const event = new CustomEvent('perch-widget:init', {
+      detail: {
+        perchWidgetId: widgetId
+      }
+    });
+    window.dispatchEvent(event);
+  }
+  
+  // Check if script is already loaded
+  const existingScript = document.querySelector('script[src*="perch-embed-widget.js"]');
+  
+  if (existingScript) {
+    // Script already exists, just emit the initialization event
+    emitInitEvent();
+    return;
+  }
+  
+  // Create and append the script tag
+  const script = document.createElement('script');
+  script.src = 'https://embeds.myperch.io/assets/perch-embed-widget.js';
+  script.async = true;
+  
+  // Initialize widget once script loads
+  script.onload = emitInitEvent;
+  
+  // Append script to document head
+  document.head.appendChild(script);
+}
+
+// Call this after the widget div is added to the page
+initializePerchWidget('your-widget-id');
+```
+</Tab>
+</Tabs>
+
+### Framework examples
+
+The following examples demonstrate both approaches. Each example uses the dynamic loading approach, but you can simplify the code by using static loading instead (just add the script to your HTML and remove the script loading logic).
 
 #### Angular example
 
-```typescript
+```typescript widget-container.component.ts
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -143,48 +234,135 @@ import { Component, OnInit } from '@angular/core';
 export class WidgetContainerComponent implements OnInit {
 
   ngOnInit() {
-    // Initialize the Perch widget when the component is initialized
-    const event = new CustomEvent('perch-widget:init', {
-      detail: {
-        perchWidgetId: 'abc123' // Replace with your actual widget ID
-      }
-    });
-    window.dispatchEvent(event);
+    this.initializePerchWidget('abc123');
+  }
+
+  private initializePerchWidget(widgetId: string): void {
+    // Helper function to emit the initialization event
+    const emitInitEvent = () => {
+      const event = new CustomEvent('perch-widget:init', {
+        detail: {
+          perchWidgetId: widgetId
+        }
+      });
+      window.dispatchEvent(event);
+    };
+    
+    // Check if script is already loaded
+    const existingScript = document.querySelector('script[src*="perch-embed-widget.js"]');
+    
+    if (existingScript) {
+      // Script already exists, just emit the initialization event
+      emitInitEvent();
+      return;
+    }
+    
+    // Create and append the script tag
+    const script = document.createElement('script');
+    script.src = 'https://embeds.myperch.io/assets/perch-embed-widget.js';
+    script.async = true;
+    
+    // Initialize widget once script loads
+    script.onload = emitInitEvent;
+    
+    // Append script to document head
+    document.head.appendChild(script);
   }
 }
 ```
 
 #### Vue.js example
 
-```javascript
+```vue WidgetContainer.vue
+<template>
+  <div class="perch-widget" widget-id="abc123">
+    <div class="perch-widget-loading-indicator">Loading...</div>
+  </div>
+</template>
+
+<script>
 export default {
   mounted() {
-    // Dispatch widget initialization when the component is mounted
-    const event = new CustomEvent('perch-widget:init', {
-      detail: {
-        perchWidgetId: 'abc123' // Replace with your actual widget ID
+    this.initializePerchWidget('abc123');
+  },
+  methods: {
+    initializePerchWidget(widgetId) {
+      // Helper function to emit the initialization event
+      const emitInitEvent = () => {
+        const event = new CustomEvent('perch-widget:init', {
+          detail: {
+            perchWidgetId: widgetId
+          }
+        });
+        window.dispatchEvent(event);
+      };
+      
+      // Check if script is already loaded
+      const existingScript = document.querySelector('script[src*="perch-embed-widget.js"]');
+      
+      if (existingScript) {
+        // Script already exists, just emit the initialization event
+        emitInitEvent();
+        return;
       }
-    });
-    window.dispatchEvent(event);
+      
+      // Create and append the script tag
+      const script = document.createElement('script');
+      script.src = 'https://embeds.myperch.io/assets/perch-embed-widget.js';
+      script.async = true;
+      
+      // Initialize widget once script loads
+      script.onload = emitInitEvent;
+      
+      // Append script to document head
+      document.head.appendChild(script);
+    }
   }
 }
+</script>
 ```
 
 #### React example
 
-```javascript
+```javascript WidgetContainer.jsx
 import { useEffect } from 'react';
 
 function WidgetContainer() {
   useEffect(() => {
-    // Initialize widget when component mounts
-    const event = new CustomEvent('perch-widget:init', {
-      detail: {
-        perchWidgetId: 'abc123' // Replace with your actual widget ID
-      }
-    });
-    window.dispatchEvent(event);
+    initializePerchWidget('abc123');
   }, []);
+
+  const initializePerchWidget = (widgetId) => {
+    // Helper function to emit the initialization event
+    const emitInitEvent = () => {
+      const event = new CustomEvent('perch-widget:init', {
+        detail: {
+          perchWidgetId: widgetId
+        }
+      });
+      window.dispatchEvent(event);
+    };
+    
+    // Check if script is already loaded
+    const existingScript = document.querySelector('script[src*="perch-embed-widget.js"]');
+    
+    if (existingScript) {
+      // Script already exists, just emit the initialization event
+      emitInitEvent();
+      return;
+    }
+    
+    // Create and append the script tag
+    const script = document.createElement('script');
+    script.src = 'https://embeds.myperch.io/assets/perch-embed-widget.js';
+    script.async = true;
+    
+    // Initialize widget once script loads
+    script.onload = emitInitEvent;
+    
+    // Append script to document head
+    document.head.appendChild(script);
+  };
 
   return (
     <div className="perch-widget" widget-id="abc123">
@@ -192,35 +370,20 @@ function WidgetContainer() {
     </div>
   );
 }
+
+export default WidgetContainer;
 ```
 
 ### Best practices for SPAs
 
+- **Load the script only once** - The initialization function includes checks to prevent loading the script multiple times, which is important for performance and avoiding conflicts
 - **Ensure that each widget is initialized only once per page**, particularly in SPAs where pages may not fully reload
 - **Dispatch the event** at the earliest point where you can guarantee the DOM element for the widget is present
 - **Clean up properly** when components are unmounted to prevent memory leaks
 
 ## Custom implementations
 
-For custom implementations or unique technical requirements:
-
-1. **Include the script** on your page (ideally in the `<head>` section)
-2. **Place the widget div** where you want the tool to appear
-3. **Trigger initialization** manually if needed (for dynamic content)
-
-### Manual initialization
-
-If you need to initialize widgets dynamically (e.g., after AJAX content loads):
-
-```javascript
-// After adding widget HTML to the page
-const event = new CustomEvent('perch-widget:init', {
-  detail: {
-    perchWidgetId: 'your-widget-id'
-  }
-});
-window.dispatchEvent(event);
-```
+For custom implementations or unique technical requirements, refer to the [Basic examples](#basic-examples) section above for the complete initialization function. Choose either the static or dynamic loading approach based on your needs.
 
 ## Troubleshooting
 
