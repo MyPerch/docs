@@ -63,7 +63,7 @@ perch-docs/
 
 ## API Specifications
 
-All API specs are hosted on S3 and automatically update:
+All API specs are hosted on S3 and automatically updated:
 
 - `https://perch-api-docs.s3.ca-central-1.amazonaws.com/partner.spec.json`
 - `https://perch-api-docs.s3.ca-central-1.amazonaws.com/realtor.spec.json`  

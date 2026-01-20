@@ -34,7 +34,7 @@ The process is simple. Use our predefined data properties and set the value in t
 ```html
 <div class="perch-widget" 
      widget-id="uMsnqDSA" 
-     widget-purchase-price="YOUR-VARIABLE" 
+     widget-property-value="YOUR-VARIABLE" 
      widget-down-payment="YOUR-VARIABLE">  
   <div class="perch-widget-loading-indicator">Loading...</div>  
 </div>
@@ -46,7 +46,7 @@ The process is simple. Use our predefined data properties and set the value in t
 <!-- Example with property listing data -->
 <div class="perch-widget" 
      widget-id="uMsnqDSA" 
-     widget-purchase-price="{{ property.price }}" 
+     widget-property-value="{{ property.price }}" 
      widget-annual-property-taxes="{{ property.taxes }}"
      widget-monthly-maintenance-fee="{{ property.maintenance }}">  
   <div class="perch-widget-loading-indicator">Loading...</div>  
@@ -75,11 +75,14 @@ Each widget has its own set of supported variables based on functionality. Here 
 | Variable | Type | Description |
 |----------|------|-------------|
 | `widget-property-value` | Number | Property purchase price or current value |
+| `widget-property-type` | String | Type of property: `Detached`, `Condo/Apartment`, `Townhouse`, `Semi-Detached`, or `Other` |
 | `widget-annual-property-taxes` | Number | Annual property tax amount |
 | `widget-monthly-maintenance-fee` | Number | Monthly maintenance or HOA fees |
 | `widget-down-payment` | Number | Down payment amount in dollars |
 | `widget-down-payment-percent` | Number | Down payment as a percentage |
+| `widget-annual-income` | Number | Annual household income |
 | `widget-referral-code` | String | Partner referral code for lead attribution |
+| `widget-advisor-profile-id` | String | Specific advisor profile ID for attribution |
 
 ### Styling options
 
@@ -88,6 +91,21 @@ Each widget has its own set of supported variables based on functionality. Here 
 | `widget-primary-color` | String (hex) | Primary brand color (e.g., "#327766") |
 | `widget-secondary-color` | String (hex) | Secondary accent color |
 | `widget-hide-titles` | Boolean | Whether to hide widget titles |
+
+### Localization
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `widget-locale` | String | Language/locale code (e.g., "en", "fr") |
+
+### UTM tracking parameters
+
+| Variable | Type | Description |
+|----------|------|-------------|
+| `widget-utm-id` | String | Unique identifier for the embed instance |
+| `widget-utm-campaign` | String | Campaign name for tracking |
+| `widget-utm-medium` | String | Marketing medium (defaults to "embed") |
+| `widget-utm-source` | String | Traffic source identifier |
 
 ## Implementation examples
 
