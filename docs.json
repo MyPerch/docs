@@ -1,7 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Perch Partner API Documentation",
+  "name": "Perch Developer Platform",
+  "api": {
+    "examples": {
+      "prefill": true
+    }
+  },
   "colors": {
     "primary": "#327766",
     "light": "#4A9B8E",
@@ -22,26 +27,22 @@
             ]
           },
           {
-            "group": "Core Concepts",
+            "group": "Core API",
             "pages": [
-              "core-concepts/leads-and-plans"
-            ]
-          },
-          {
-            "group": "API Fundamentals",
-            "pages": [
-              "getting-started/api-overview",
+              "getting-started/overview",
+              "core-concepts/leads-and-plans",
               "getting-started/authentication",
               "getting-started/postman-setup",
               "getting-started/errors-and-response-codes",
               "getting-started/rate-limits",
-              "getting-started/pagination"
+              "getting-started/pagination",
+              "api-reference/submitting-and-tracking-leads"
             ]
           },
           {
-            "group": "API Guides",
+            "group": "Lending API",
             "pages": [
-              "api-reference/submitting-and-tracking-leads"
+              "lending-services/overview"
             ]
           },
           {
@@ -69,7 +70,7 @@
         ]
       },
       {
-        "tab": "Realtor API", 
+        "tab": "Realtor API",
         "groups": [
           {
             "group": "Realtor API Reference",
@@ -81,20 +82,8 @@
         ]
       }
     ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Home",
-          "href": "https://myperch.io",
-          "icon": "house"
-        },
-        {
-          "anchor": "Support",
-          "href": "mailto:support@myperch.io",
-          "icon": "envelope"
-        }
-      ]
-    }
+    "global": {}
+
   },
   "logo": {
     "light": "/logo/light.svg",

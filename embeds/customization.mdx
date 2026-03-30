@@ -5,31 +5,17 @@ description: "Learn how to customize Perch's embeddable tools with pre-filled da
 
 Perch's embeddable tools can be customized to pre-fill certain pieces of information and modify their appearance, which can significantly improve their usability and integration with your website.
 
-<Note>
-If you haven't already, be sure to speak with your point of contact at Perch to become a **Perch Partner** and get set up with our embeddable tool service.
-</Note>
+## Overview
 
-Our embeddable tool service provides **Perch Partners** with an array of mortgage and finance tools and calculators (e.g. live rates, purchase price qualifier, mortgage payment, etc.) that can be embedded on any website to enhance your user experience.
+Embeds support two types of customization: **pre-filling data** to reduce user friction, and **styling** to match your brand.
 
-## Why customize embedded tools?
+For example, if you run a property listing website you can pre-fill the property price so the mortgage calculator loads with the right value already set — no manual input required.
 
-### Pre-filling values for better UX
+## Pre-filling data
 
-If you run a **property listing website** and want to embed our pre-qualification or mortgage payment calculator, you might want to pre-fill the **property price** from a particular listing so that:
+Use our predefined data attributes directly in the embed `div` to pass values in. Set them using your CMS or templating language.
 
-- Tool output values are pre-calculated using that listing price
-- Users don't need to manually adjust values
-- The experience feels seamless and integrated with your content
-
-### Consistent branding
-
-Customization also allows you to match the tool's appearance to your website's design system, creating a cohesive user experience.
-
-## How to inject variables
-
-The process is simple. Use our predefined data properties and set the value in the embed code using your CMS or templating language.
-
-### Basic example
+### Static values
 
 ```html
 <div class="perch-widget" 
@@ -40,7 +26,7 @@ The process is simple. Use our predefined data properties and set the value in t
 </div>
 ```
 
-### Dynamic example with template variables
+### Dynamic values
 
 ```html
 <!-- Example with property listing data -->
@@ -57,9 +43,9 @@ The process is simple. Use our predefined data properties and set the value in t
 
 Perch supports both single and multi-widget embeds. Multi-widget embeds include a navigation bar to help users navigate between different calculators.
 
-### Global variable setting
+### Variables are global
 
-The great news is that injectable variables are set **globally**, which means:
+Data attributes are applied **globally** across all widgets in the embed, which means:
 
 - Set them once on the embed code
 - All widgets contained in the embed will receive the provided variables
@@ -107,9 +93,9 @@ Each widget has its own set of supported variables based on functionality. Here 
 | `widget-utm-medium` | String | Marketing medium (defaults to "embed") |
 | `widget-utm-source` | String | Traffic source identifier |
 
-## Implementation examples
+## Examples
 
-### Property listing integration
+### Property listing
 
 ```html
 <!-- Real estate listing page -->
@@ -124,7 +110,7 @@ Each widget has its own set of supported variables based on functionality. Here 
 </div>
 ```
 
-### Branded styling
+### Custom branding
 
 ```html
 <!-- Customized appearance -->
@@ -137,7 +123,7 @@ Each widget has its own set of supported variables based on functionality. Here 
 </div>
 ```
 
-### Dynamic CMS integration
+### CMS integration
 
 ```php
 <!-- Example with PHP/WordPress -->
@@ -152,19 +138,12 @@ Each widget has its own set of supported variables based on functionality. Here 
 
 ## Best practices
 
-### Performance
-- Pre-fill as many relevant values as possible to reduce user friction
-- Use cached values when available to maintain consistency across pages
+- Pre-fill as many relevant values as possible to reduce friction
+- Ensure pre-filled values make sense in context — a property price should match the listing it appears alongside
+- Use your referral code to ensure leads are properly attributed
+- Match your brand colors and test on both light and dark backgrounds
+- Use `widget-hide-titles` if widget headings conflict with your page layout
 
-### User experience  
-- Ensure pre-filled values make sense in context (e.g., property price matches the listing)
-- Consider using the referral code to track lead attribution
+## Need help?
 
-### Styling
-- Match your brand colors for a cohesive experience
-- Test the tool on both light and dark backgrounds
-- Consider hiding titles if they conflict with your page layout
-
-## Getting help
-
-Have questions about embeddable tools or need assistance with customization? Contact your Perch point of contact who will be able to help you out and answer any questions about implementation and best practices. 
+Contact your Perch representative for assistance with customization or implementation questions. 

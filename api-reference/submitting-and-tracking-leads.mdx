@@ -45,8 +45,6 @@ Rest assured, Perch has prioritized the security of your data. Perch employs rob
 **Important**: to automatically populate the client's profile with the submitted **`Lead`** data, the client must sign up using the **same email address** that was used to create the **`Lead`**.
 </Warning>
 
-In the Perch ecosystem, a **`Plan`** is simply the name we've given to the resource which contains details related to one or more mortgage applications (e.g. home buying plan, refinancing plan, etc.). Since it is possible for a client to have simultaneous mortgage applications (e.g 1st & 2nd position mortgage / 1st position mortgage + HELOC), we created the **`Plans`** resource to allow for the bucketing of the related applications. You can assume that 90% of the time a Plan has only one mortgage application.
-
 To create a Lead, make a `POST` request to the endpoint [/firms/{firm_id}/leads](/partner/api-documentation#tag/Lead/operation/post-leads-for-firm). Upon successful creation of a Lead we recommend storing the Lead.id primary key in your own system so that you can periodically check for updates on the Lead's conversion (i.e. did they actually sign up, where are they at in their process, etc.).
 
 ### Example Request
@@ -171,7 +169,7 @@ curl -X GET 'https://api.partner.myperch.io/v1/firms/{firm_id}/leads?scope=withD
 -H 'x-api-key: your_api_key'
 ```
 
-The response returned will contain an array of **`Leads`** created by the provided **`Firm`**. The default list **`limit`** is 50 and **`offset`** is 0. Please refer to our detailed API documentation to learn about the use of params like **`limit`** and **`offset`** to page through results.
+The response will contain an array of **`Leads`** created by the provided **`Firm`**. See [Pagination and query parameters](/getting-started/pagination) for details on `limit`, `offset`, and other query params.
 
 ## 4. Creating a Lead with Plan Data
 
@@ -262,7 +260,7 @@ curl -X GET 'https://api.partner.myperch.io/v1/firms/{firm_id}/leads?scope=withD
 
 This request fetches all Leads and associated Plans for the provided **`firmId`**. This response provides a snapshot of the current mortgage applications that you are able to access.
 
-The response will contain an array of **`Leads`** owned by the provided **`firmId`** and any associated **`Plans`**. The default list **`limit`** is 50 and **`offset`** is 0. Please refer to our detailed API documentation to learn about the use of params like **`limit`** and **`offset`** to page through results.
+The response will contain an array of **`Leads`** owned by the provided **`firmId`** and any associated **`Plans`**. See [Pagination and query parameters](/getting-started/pagination) for details on `limit`, `offset`, and other query params.
 
 ## 6. Updating a Lead
 

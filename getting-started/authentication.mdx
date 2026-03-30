@@ -1,9 +1,9 @@
 ---
 title: "Authentication"
-description: "Learn how to authenticate with the Perch Partner API using API keys"
+description: "Learn how to authenticate with the Perch Core API using API keys"
 ---
 
-To use the Perch Partner API, you must authenticate each request with an API key that identifies your application and proves that the request is authorized. The authentication process is simple and stateless — just supply one header with each request.
+To use the Perch Core API, you must authenticate each request with an API key that identifies your application and proves that the request is authorized. The authentication process is simple and stateless — just supply one header with each request.
 
 ## Overview
 
@@ -12,7 +12,7 @@ Every API request must include the following header:
 - `X-API-Key` - Authenticates your request and identifies your firm
 
 <Note>
-The API key header is required for every request to the Partner API.
+The API key header is required for every request to the Core API.
 </Note>
 
 ## Steps to obtain and use an API key
@@ -44,16 +44,8 @@ The API key header is required for every request to the Partner API.
   </Step>
 
   <Step title="Configure your environment">
-    Based on your access level, you'll use one of the following domains:
-    
-    **Sandbox Environment:**
-    - Partner API: `api.partner.dit.myperch.io`
-    - Realtor API: `api.realtor.dit.myperch.io`
-    
-    **Production Environment:**
-    - Partner API: `api.partner.myperch.io`
-    - Realtor API: `api.realtor.myperch.io`
-    
+    Based on your access level, you'll use the appropriate sandbox or production domain. See the [API Overview](/getting-started/overview#domains) for the full list of domains by API type.
+
     Always test your integration thoroughly in the sandbox environment before switching to production.
   </Step>
 </Steps>
@@ -98,7 +90,7 @@ If you experience persistent authentication issues, verify that you're using the
 
 ## Next steps
 
-- Review the [API Overview](/getting-started/api-overview) for general API concepts and best practices
+- Review the [Overview](/getting-started/overview) for general API concepts and best practices
 - Set up [Postman](/getting-started/postman-setup) for API testing with your new credentials
 - Explore the [Partner API documentation](/api-reference/overview) to understand available endpoints
 - Start with our [lead submission guide](/api-reference/submitting-and-tracking-leads) for common use cases 
