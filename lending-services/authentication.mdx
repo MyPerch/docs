@@ -1,0 +1,66 @@
+---
+title: "Authentication"
+description: "Learn how to authenticate with the Perch Lending Services API using API keys"
+---
+To use the Perch Lending Services API, you must authenticate each request with an API key that identifies your application and proves that the request is authorized. The authentication process is simple and stateless, it requires supplying a header with each request.
+
+## Overview
+
+Every API request must include the following header:
+
+- `X-API-Key` - Authenticates your request and identifies your firm
+
+<Note>
+The API key header is required for every request to the Lending Services API.
+</Note>
+
+## Steps to obtain and use an API key
+
+<Steps>
+  <Step title="Contact Perch Lending Services for API access">
+    Reach out to the Perch Lending Services team at [partnersupport@myperch.io](mailto:partnersupport@myperch.io) to request API access for your organization. During this process, you'll need to provide:
+    
+    - Your business information and use case
+    - Whether you need stable environment or production access (or both)
+
+    <Note>Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) immediately if you suspect your key has been compromised</Note>
+    
+   
+  </Step>
+
+  <Step title="Receive your API key">
+    Our team will provision a long-lived API key tied to your business record. This key acts as a permanent access token and must be included in the `X-API-Key` header with every request.
+    
+    You'll also receive:
+    - Your specific API domain (stable environment or production)
+    - Documentation specific to your use case
+    - Any additional configuration details
+    
+    <Warning>
+    Treat your API keys like secrets â€” keep them out of client-side code and version control. Store them securely in your backend systems only.
+    </Warning>
+  </Step>
+
+  <Step title="Configure your environment">
+    Based on your access level, you'll use the appropriate stable environment or production domain. See the [API Overview](/lending-services/overview#paths) for the full list of API end points.
+     <Info>
+    We recommend starting with stable environment access to test your integration before moving to production.
+    </Info>
+
+  </Step>
+</Steps>
+
+
+## Troubleshooting authentication
+
+Common authentication issues and solutions:
+
+| Error Code | Description | Solution |
+|------------|-------------|----------|
+| `401 Unauthorized` | No valid API key provided | Ensure the `X-API-Key` header is included and spelled correctly |
+| `403 Forbidden` | API key doesn't have required permissions | Contact support to verify your key's permissions for the requested resource |
+| `429 Too Many Requests` | Rate limit exceeded | Implement exponential backoff and respect rate limits |
+
+<Note>
+If you experience persistent authentication issues, verify that you're using the correct domain for your environment (stable environment vs. production) and that your API key matches the environment you're targeting.
+</Note>

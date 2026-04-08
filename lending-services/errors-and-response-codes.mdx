@@ -1,0 +1,329 @@
+
+## Overview
+Perch uses conventional HTTP response codes to indicate the success or failure of an API request. 
+
+In general: Codes in the `2xx` range indicate success. Codes in the `4xx` range indicate an error that failed given the information provided (e.g., a required parameter was omitted, a charge failed, etc.). Codes in the `5xx` range indicate an error with Perchâ€™s servers (these are rare, but they can happen).
+
+---
+
+### HTTP Status Codes
+
+Standard HTTP codes. `2xx` means it worked, `4xx` means the caller messed up, `5xx` means we did.
+
+| Status | Code | Canonical Status | Description |
+|--------|------|-----------------|-------------|
+| 200 | OK | - | Everything worked. |
+| 201 | Created | - | New resource created successfully. |
+| 400 | Bad Request | `INVALID_ARGUMENT` | Something wrong with the request that isn't a validation issue. |
+| 401 | Unauthorized | `UNAUTHENTICATED` | No valid credentials provided. |
+| 403 | Forbidden | `PERMISSION_DENIED` | Authenticated, but not allowed to do this. |
+| 404 | Not Found | `NOT_FOUND` | The resource doesn't exist, or you can't see it. |
+| 405 | Method Not Allowed | `INVALID_ARGUMENT` | Wrong HTTP method for this endpoint. |
+| 409 | Conflict | `CONFLICT` | The request conflicts with current state (duplicate, concurrent write, etc.). |
+| 412 | Precondition Failed | `FAILED_PRECONDITION` | A business rule blocked the operation. |
+| 422 | Unprocessable Entity | `UNPROCESSABLE` | Validation failed. Usually missing or malformed fields. |
+| 429 | Too Many Requests | `RATE_LIMITED` | Slow down. Back off exponentially and retry. |
+| 500 | Internal Server Error | `INTERNAL` | Something broke on our side. |
+| 502 | Bad Gateway | `UNAVAILABLE` | An upstream service returned garbage. |
+| 503 | Service Unavailable | `UNAVAILABLE` | A downstream dependency is unreachable. |
+| 504 | Gateway Timeout | `TIMEOUT` | The operation timed out. |
+
+
+## Error Response Format
+
+Every `4xx` and `5xx` response uses the same envelope. No surprises.
+
+```json
+{
+  "code": 422,
+  "status": "UNPROCESSABLE",
+  "message": "Validation failed for the submitted request.",
+  "errors": [
+    {
+      "location": "body.applicants[0].creditScore",
+      "message": "Must be an integer."
+    },
+    {
+      "location": "body.applicants[0].email",
+      "message": "This field is required."
+    }
+  ],
+  "requestId": "32f1a9b2-7c8e-4b1a-9d3f-abc123def456",
+  "timestamp": "2026-04-06T12:34:56.789Z"
+}
+```
+
+| Field | Type | Always present | Description |
+|-------|------|----------------|-------------|
+| `code` | `int` | Yes | HTTP status code. Same as the response status. |
+| `status` | `string` | Yes | Canonical status string (see table above). |
+| `message` | `string` | Yes | Top-level summary. Safe to show to end users. |
+| `errors` | `array` or `null` | No | Field-level details. Present on 422s from validation, sometimes on 409s. |
+| `requestId` | `string` or `null` | No | Correlation ID. Pulled from `X-Trace-Id` or `X-Request-Id` headers, or auto-generated. Use this when reporting issues. |
+| `timestamp` | `string` | Yes | UTC ISO 8601 timestamp. |
+
+The `errors` array, when present, contains objects with two fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `location` | `string` | Dot-delimited path to the problematic field. Examples: `body.email`, `body.filters.types[1]`, `query.page`. |
+| `message` | `string` | What's wrong with that field. Always client-safe. |
+
+---
+
+## Validation Errors (422)
+
+When request validation fails (Pydantic does most of this), you get a 422 with the `errors` array populated. Each entry tells you which field and what went wrong.
+
+### Location Format
+
+Locations use dot notation with array indices in brackets:
+
+- `body.fieldName` - top-level request body field
+- `body.nested.fieldName` - nested object
+- `body.items[0].fieldName` - element inside an array
+- `query.fieldName` - query parameter
+
+### Example
+
+```json
+{
+  "code": 422,
+  "status": "UNPROCESSABLE",
+  "message": "Validation failed for the submitted request.",
+  "errors": [
+    {
+      "location": "body.mortgageType",
+      "message": "Value is not a valid option."
+    },
+    {
+      "location": "body.applicants[0].annualIncome",
+      "message": "Must be a number."
+    },
+    {
+      "location": "body.propertyValue",
+      "message": "This field is required."
+    }
+  ],
+  "requestId": "a1b2c3d4-...",
+  "timestamp": "2026-04-06T12:34:56.789Z"
+}
+```
+
+If the entire request body is missing, you get:
+
+```json
+{
+  "code": 422,
+  "status": "UNPROCESSABLE",
+  "message": "Validation failed for the submitted request.",
+  "errors": [
+    {
+      "location": "body",
+      "message": "Request body is required."
+    }
+  ],
+  "requestId": "...",
+  "timestamp": "..."
+}
+```
+
+---
+
+## Common Error Scenarios
+
+### Authentication (401)
+
+- Missing credentials entirely
+- Expired or invalid token
+- Malformed auth header
+
+The response won't tell you which one. That's intentional. We don't leak auth implementation details.
+
+```json
+{
+  "code": 401,
+  "status": "UNAUTHENTICATED",
+  "message": "Authentication is required.",
+  "requestId": "...",
+  "timestamp": "..."
+}
+```
+
+### Authorization (403)
+
+- Valid credentials, but the caller doesn't have permission for this resource or action
+
+```json
+{
+  "code": 403,
+  "status": "PERMISSION_DENIED",
+  "message": "You do not have permission to perform this action.",
+  "requestId": "...",
+  "timestamp": "..."
+}
+```
+
+### Not Found (404)
+
+- Resource doesn't exist
+- Resource exists but the caller can't access it (we return 404 instead of 403 to avoid confirming that the resource exists)
+
+```json
+{
+  "code": 404,
+  "status": "NOT_FOUND",
+  "message": "The requested resource was not found.",
+  "requestId": "...",
+  "timestamp": "..."
+}
+```
+
+### Conflict (409)
+
+- Duplicate resource (same unique key already exists)
+- Concurrent modification conflict
+- State conflict (trying to do something the resource's current state doesn't allow)
+
+```json
+{
+  "code": 409,
+  "status": "CONFLICT",
+  "message": "The request conflicts with the current state.",
+  "requestId": "...",
+  "timestamp": "..."
+}
+```
+
+### Precondition Failed (412)
+
+- A business rule wasn't satisfied. The request itself is well-formed, but the system can't process it given the current state.
+
+```json
+{
+  "code": 412,
+  "status": "FAILED_PRECONDITION",
+  "message": "A precondition for this request was not met.",
+  "requestId": "...",
+  "timestamp": "..."
+}
+```
+
+### Rate Limiting (429)
+
+- Too many requests in a short window
+
+When you get a `429`, back off. Start with a 1-second delay, double it on each retry, cap at 60 seconds.
+
+```json
+{
+  "code": 429,
+  "status": "RATE_LIMITED",
+  "message": "Too many requests. Please slow down and retry shortly.",
+  "requestId": "...",
+  "timestamp": "..."
+}
+```
+
+
+## Exception Hierarchy
+
+For anyone working in this codebase, here's how the exception classes map. All of them inherit from `AppError`.
+
+### Client Errors (4xx)
+
+| Exception Class | HTTP Code | Status | Default Client Message |
+|----------------|-----------|--------|----------------------|
+| `BadRequestError` | `400` | `INVALID_ARGUMENT` | The request is invalid. |
+| `UnauthorizedError` | `401` | `UNAUTHENTICATED` | Authentication is required. |
+| `ForbiddenError` | `403` | `PERMISSION_DENIED` | You do not have permission to perform this action. |
+| `NotFoundError` | `404` | `NOT_FOUND` | The requested resource was not found. |
+| `ConflictError` | `409` | `CONFLICT` | The request conflicts with the current state. |
+| `PreconditionFailedError` | `412` | `FAILED_PRECONDITION` | A precondition for this request was not met. |
+| `ValidationError` | `422` | `UNPROCESSABLE` | Validation failed for the submitted request. |
+| `RateLimitedError` | `429` | `RATE_LIMITED` | Too many requests. Please slow down and retry shortly. |
+
+
+### Domain-Specific
+
+| Exception Class | HTTP Code | Status | Default Client Message |
+|----------------|-----------|--------|----------------------|
+| `MortgageOfferMapperError` | `422` | `UNPROCESSABLE` | Failed to process mortgage offer data. |
+
+All exception classes live in `app/core/errors/models.py`.
+
+
+
+## Example Error Handling
+
+### Caller Side (JavaScript)
+
+If you're integrating with this API, here's a pattern that covers the main cases:
+
+```javascript
+async function callApi(url, options) {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": apiKey,
+      "X-Trace-Id": generateTraceId(),
+      ...options.headers,
+    },
+  });
+
+  if (response.ok) {
+    return response.json();
+  }
+
+  const error = await response.json();
+
+  switch (response.status) {
+    case 401:
+      // credentials are bad, don't retry
+      redirectToLogin();
+      break;
+
+    case 403:
+      showError("You don't have access to this resource.");
+      break;
+
+    case 404:
+      showError("Not found.");
+      break;
+
+    case 422:
+      // field-level errors - show them next to the form fields
+      if (error.errors) {
+        for (const fieldError of error.errors) {
+          showFieldError(fieldError.location, fieldError.message);
+        }
+      }
+      break;
+
+    case 429:
+      // back off and retry
+      await retryWithBackoff(() => callApi(url, options));
+      break;
+
+    default:
+      if (response.status >= 500) {
+        // server error - retry a few times, then give up
+        console.error(`Server error [${error.requestId}]: ${error.message}`);
+        await retryWithBackoff(() => callApi(url, options), { maxRetries: 3 });
+      } else {
+        showError(error.message);
+      }
+  }
+}
+```
+
+---
+
+## Best Practices for Callers
+
+- **Check the status code.** Don't assume success.
+- **Use `requestId` for support requests.** It lets us trace the full request lifecycle on our end.
+- **Parse the `errors` array on `422`.** It tells you exactly which fields failed and why. Show these to the user if you're building a form.
+- **Retry on `429` and `5xx`.** Use exponential backoff. Start at 1 second, double each time, cap at 60 seconds. Don't retry `4xx` errors (except `429`) since the same request will fail the same way.
+- **Don't parse the `message` string programmatically.** Use `code` and `status` for branching logic. The message is for humans.

@@ -1,0 +1,86 @@
+---
+title: "Postman Setup Guide"
+description: "Step-by-step guide to import and configure the Perch Lending Services API in Postman for instant testing"
+---
+
+## Overview
+
+By simply importing the provided Postman collection into Postman, you can start using the Perch Lending Services API near-instantly. Follow the guide below to import and configure the collection.
+
+## Requirements
+
+Before getting started, ensure you have:
+
+- [Postman](https://www.postman.com/downloads/) v11 or later installed
+- Postman collection for `Perch Lending Services API`
+- An API Key from Perch
+
+<Note>
+Please contact us at [partnersupport@myperch.io](mailto:partnersupport@myperch.io) should you have any challenges or questions obtaining any of the above.
+</Note>
+
+## Setup Instructions
+
+### Step A: Import the Collection
+
+1. Open Postman and click **Import** in the sidebar
+2. Drag and drop the `postman_collection.json` file into the import window, or click to **select the file** from your filesystem
+3. Postman will automatically detect the Postman Collection v2.1 format and import it
+
+<Frame caption="Click Import in the sidebar and drop the postman_collection.json file">
+</Frame>
+
+### Step B: Verify Import Success
+
+Once imported, you will see an **Import Complete** message in the footer.
+
+1. Click **Go to Collection** in the import confirmation message, or open the **Collections** tab in the sidebar
+2. Expand the **Perch Lending Services API** collection to see the **System** and **Offers** folders
+
+<Frame caption="View the imported Perch Lending Services API collection in the Collections sidebar">
+</Frame>
+
+### Step C: Configure API Variables
+
+Set up your API key using the provided credentials:
+
+1. Open the **Perch Lending Services API Collection**
+2. Open the **Variables** section and add the following variables:
+   - **`base_url`** â€” The base URL of the Perch Lending Services API (e.g., `https://api.myperch.io`)
+   - **`api_token`** â€” Your API key from Perch
+
+<Frame caption="Add your API key and base URL in the Variables section of the Perch Lending Services API Collection">
+</Frame>
+
+<Warning>
+Remember to keep your API key secure and never expose it in client-side applications or public repositories.
+</Warning>
+
+### Step D: Explore Request Examples
+
+Each request in the collection includes pre-filled examples:
+
+1. Expand the **Offers** folder in the collection
+2. Click on any request (e.g., **All Offers (Qualified)**)
+3. Open the **Body** tab to see a complete JSON request example with all required and optional fields
+4. Open the saved **Examples** under a request to see sample responses
+
+<Frame caption="Explore the pre-filled request body and example responses in the collection">
+</Frame>
+
+### Step E: Test API Requests
+
+The API exposes only **GET** and **POST** methods. To make sample HTTP requests:
+
+1. Open the desired endpoint folder in the **Perch Lending Services API** collection (e.g., **System** for health checks or **Offers** for mortgage offer searches)
+2. Choose a request in the collection
+3. For **POST** requests, review the **Body** tab â€” each request includes a pre-filled JSON example with the correct camelCase field names
+4. The `{type}` path parameter in offer endpoints accepts either `qualified` or `unqualified`
+5. Click **Send** to make a request to the API using the **`base_url`** configured in the Variables section
+
+<Frame caption="Test API requests by configuring parameters and clicking Send to execute the request">
+</Frame>
+
+<Note>
+By default, requests will be made to the environment specified by your `base_url` variable. You can modify the `base_url` variable to switch between test and production environments.
+</Note>

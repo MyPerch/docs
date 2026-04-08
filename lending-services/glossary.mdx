@@ -1,0 +1,118 @@
+This contains the common terms and their definitions encountered when using the Lending Services API.
+
+### Common Mortgage Terms
+
+**Adjudication**
+The process of determining whether a borrower can afford a given mortgage offer. The API calculates the borrower's GDS and TDS ratios and compares them against each lender's specific thresholds. Offers that exceed a lender's limits are excluded from the response.
+
+**Amortization**
+The total length of time over which a mortgage is repaid, expressed in months. For example, a 25-year amortization is 300 months. This is distinct from the mortgage term. Offers in the response are grouped by amortization period.
+
+**Bona Fide Clause**
+A mortgage feature that restricts the lender from calling or renegotiating the mortgage unless the property is sold. Indicated by `hasBonafideClause` on an offer's feature flags.
+
+**Bridge Financing**
+A short-term loan that allows a borrower to cover the gap between purchasing a new property and receiving proceeds from selling an existing one. Indicated by `hasBridgeFinancing`.
+
+**Commission**
+The fee Perch earns when a mortgage is funded through a Lender. The `CommissionInfo` input object allows callers to specify minimum commission thresholds and maximum buydown limits; the `CommissionInformation` object in the response reports the gross commission, buydown rate applied, and resulting buydown cost where applicable.
+
+**Deal Purpose**
+The nature of the mortgage transaction. Supported values are `PURCHASE`, `RENEWAL`, `REFINANCE`, and `SWITCH`. Lenders may only support certain transaction types; this is used during lender filtering.
+
+**Debt Service Ratios (GDS / TDS)**
+Standard Canadian mortgage qualification metrics. Lenders set their own GDS and TDS thresholds; qualified endpoints enforce these limits.
+
+**Down Payment**
+The upfront amount the borrower contributes toward the purchase price. Affects the loan-to-value ratio, which determines insurance requirements and lender eligibility.
+
+**HELOC (Home Equity Line of Credit)**
+A revolving credit facility secured against property equity, often attached to an existing mortgage. A readvanceable HELOC allows the borrower to re-borrow repaid principal. Indicated by `hasReadvanceableHeloc`.
+
+**Insured Status**
+Describes whether a mortgage is covered by default insurance. The API returns one of four statuses:
+- `INSURED`: mortgage is insured; down payment is less than 20%
+- `INSURABLE`: mortgage meets insurer criteria but is not currently insured (down payment is 20%+)
+- `UNINSURABLE`: mortgage does not meet insurer criteria (e.g., purchase price over $1.5M, refinance)
+- `INSURED QUICK CLOSE`: insured mortgage with an expedited closing premium applied
+
+**Insurance Premium**
+A one-time premium charged on insured mortgages, added to the principal. The amount is based on the loan-to-value (LTV) ratio and is set by the mortgage insurer.
+
+**Loan-to-Value Ratio (LTV)**
+The ratio of the mortgage amount to the property's appraised or purchase value. LTV determines whether mortgage insurance is required (above 80% LTV = insured) and influences lender eligibility and product availability.
+
+**Offer**
+A single mortgage product from a specific lender, for a given term and rate type. Each offer includes the interest rate, payment details, fees, commission breakdown, feature flags, and insured status.
+
+**Offer Group**
+A collection of offers that share the same amortization period, rate type, and term length. The `/qualified/all` and `/qualified/lowest-rates` responses return offers grouped this way, sorted by effective rate within each group.
+
+
+**Portability**
+A mortgage feature that allows the borrower to transfer their existing mortgage â€” including rate and terms â€” to a new property when they move, avoiding prepayment penalties. Indicated by `hasPortability`.
+
+**Assumability**
+A feature that allows a buyer to take over the seller's existing mortgage, including its rate and remaining term. Indicated by `hasAssumability`.
+
+**Prepayment Penalty**
+A fee charged when a borrower breaks or pays off their mortgage before the end of the term. The API returns penalty details including the penalty type (`GREATEST` or `LEAST` of the applicable calculations) and the component breakdown (interest, IRD, or fixed amount).
+
+**Principal**
+The outstanding loan amount, excluding any insurance premium. 
+
+**Product Category**
+A grouping of mortgage offers by rate type and term, used by the `/qualified/lowest-rates` endpoint to return the best offer per category (e.g., fixed 5-year, variable 3-year).
+
+**Property Valuation**
+The assessed value of the target property. The API accepts three valuation types
+- `purchase`: The Purchase Price details of the house when it was acquired, or the cost of the house the borrower is looking to purchase (if a new buy)
+- `estimated`: A Perch estimated value of the property
+- `appraisal`: The amount the property was appraised for if refinancing.
+The valuation influences LTV calculations and lender eligibility.
+
+**Rate Type**
+The structure of the interest rate applied to a mortgage. The API supports three types:
+- `FIXED`: rate is locked for the full term
+- `VARIABLE`: rate floats with the lender's prime rate; payments may vary
+- `ADJUSTABLE`: rate floats with prime, but payments adjust automatically to maintain amortization schedule
+
+**Request ID**
+A unique correlation identifier returned on every response (`requestId`) and echoed in the `X-Trace-Id` response header. Include this in any support requests for traceability.
+
+**Switch**
+A transaction type where a borrower moves their existing mortgage from one lender to another at renewal, typically to obtain a better rate, without changing the loan amount.
+
+**Term**
+The length of the current mortgage contract, expressed in months. This is distinct from the amortization period. Offers can be filtered by term using the `terms` filter parameter.
+
+### Lender Codes and Definitions
+A short identifier for a specific lender (e.g., `TD`, `NEO`, `MCAP`); this is used in filters to restrict results to specific lenders, and returned on each offer to identify the associated lender.
+
+| Code | Lender |
+|---|---|
+| B2B | B2B |
+| BMO | Bank of Montreal | 
+| CT | Community Trust Bank |
+| CWB | Canadian Western Bank |
+| DES | Desjardins |
+| DUCA | DUCA |
+| EQB | Equitable Bank |
+| FN | First National |
+| FO | First Ontario |
+| LW | Lendwise |
+| MAN | Manulife |
+| MCAN | MCAN Financial Group |
+| MCAP | MCAP |
+| NB | National Bank |
+| NEO | Neo Financial |
+| NPX | NPX |
+| OPT | Optimum |
+| RAD | Radius |
+| RFA | RFA |
+| RMG | RMG Mortgages |
+| SCB | Scotiabank |
+| SHB | Shinhan |
+| STV | Strive |
+| TD | Toronto Dominion Bank |
+| WO | WealthOne |

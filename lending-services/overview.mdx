@@ -1,12 +1,67 @@
+
+Welcome to the Perch Lending Services API, this is the centralized engine powering **Mortgage Offer** generation across Perch's platform and partner integrations.
+
+This API evaluates borrower profiles against lender policies, and product catalogues and returns ranked mortgage offers; the service runs a live evaluation that filters for lenders, calculating rates and commissions, applying buydown logic, and adjudicating each offer against the borrower's debt servicing capacity.
+
+<Note>All monetary values returned are in **Canadian Dollars (CAD)**.</Note>
+
+
 ---
-title: "Overview"
-description: "A dedicated API powering auto-adjudication, real-time rate retrieval, and mortgage search"
+
+## What the API Does
+
+At its core, the Lending Services API answers one question: *what mortgage offers can this borrower get, and at what rate?*
+
+When a request is made, the API runs the borrower's profile through a sequential pipeline:
+
+1. **Lender Filtering** â€” Narrows the pool to lenders whose policies are compatible with the borrower's province, credit score, transaction type, property type, and requested features etc.
+2. **Rates & Commissions** â€” Calculates the applicable interest rate and Perch commission for each eligible lender.
+3. **Buydown** â€” Where applicable, redirects a portion of commission to reduce the borrower's offered rate below the market benchmark. (*Should this be included?*)
+4. **Adjudication** â€” Validates whether the borrower can service the debt using GDS and TDS ratios, compared against each lender's specific thresholds.
+5. **Offer Grouping & Ranking** â€” Returns surviving offers grouped by amortization, rate type, and term, sorted by effective rate (low to high).
+
 ---
 
-<Info>
-Perch Lending Services is currently in development and not yet available for external integration. [Contact us](mailto:partnersupport@myperch.io) to learn more or request early access.
-</Info>
+## Qualified vs. Unqualified Endpoints
 
-Perch Lending Services is a separate API platform from Perch Core, purpose-built for real-time mortgage decisioning. It will expose auto-adjudication endpoints, live rate retrieval, and mortgage product search — and will power the next generation of Perch embeds including the upcoming Mortgage Search widget.
+The API exposes two modes of offer retrieval, this guide explains the difference and provides recommendations on when to use either of them.
 
-Full documentation will be published here when the API is available.
+### Qualified (`/qualified/..`)
+
+Qualified endpoints run the full pipeline (including adjudication). 
+
+Offers returned here are ones the borrower has been assessed against i.e., their income, existing debts, and property costs are evaluated to compute Debt Servicing Ratios (GDS & TDS); these ratios are then compared against each lender's thresholds to determine what offers the borrower can actually service.
+
+**Use qualified endpoints when:**
+- You are presenting offers to a specific, identified borrower with known financial details
+- You need to show only what a borrower is eligible for (e.g., in an application flow or rate comparison tool)
+- Accuracy and lender compliance are required e.g., before a borrower proceeds to a mortgage application
+
+
+**Real-world example:** A borrower on your platform has submitted their income, existing liabilities, and property details. You call `POST /api/v1/offers/qualified/lowest-rates` to surface the best available rate per product category (fixed 5-year, variable, etc.) that this specific person qualifies for. The response reflects what they could realistically be approved for.
+
+### Unqualified (`/unqualified/..`)
+
+Unqualified endpoints consider the borrower's profile attributes e.g., property type, province, down payment, transaction type etc. to apply lender eligibility and product boundaries, but they do **not** restrict offers based on debt servicing ratios (*adjudication*). The borrower's income and existing debts are not used to filter results.
+
+**Use unqualified endpoints when:**
+- You want to show indicative or best-available rates without tying results to a specific borrower's financial position
+- You are building a rate explorer, pre-qualification widget, or marketing surface where a borrower has not yet provided full financial details
+- You want to benchmark what the market looks like for a given property and product type
+
+**Real-world example:** A visitor lands on your marketing site and wants to know what mortgage rates look like today â€” no account, no application, no financial details entered. You call `POST /api/v1/offers/unqualified/lowest-rate` with the property type, province, and a standard down payment amount to display the best rate currently available across all lenders. The result powers a "Today's Lowest Rate" headline or rate ticker on the page thus giving prospective borrowers a compelling, market-accurate number without requiring them to share any personal financial information.
+
+---
+
+### Choosing the Right Endpoint
+
+| Scenario | Endpoint to Use |
+|---|---|
+| Full mortgage application with borrower financials | `/qualified/all` or `/qualified/lowest-rates` |
+| Show the single best rate a borrower qualifies for | `/qualified/lowest-rate` |
+| Rate explorer / marketing surface (no full profile) | `/unqualified/lowest-rate` |
+| Comparison tool for best rate per product category based on the borrower's financial position | `/qualified/lowest-rates` |
+| Pre-qualification widget with partial borrower data | `/unqualified/lowest-rate` |
+
+---
+
