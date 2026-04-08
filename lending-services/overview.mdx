@@ -14,11 +14,11 @@ At its core, the Lending Services API answers one question: *what mortgage offer
 
 When a request is made, the API runs the borrower's profile through a sequential pipeline:
 
-1. **Lender Filtering** â€” Narrows the pool to lenders whose policies are compatible with the borrower's province, credit score, transaction type, property type, and requested features etc.
-2. **Rates & Commissions** â€” Calculates the applicable interest rate and Perch commission for each eligible lender.
-3. **Buydown** â€” Where applicable, redirects a portion of commission to reduce the borrower's offered rate below the market benchmark. (*Should this be included?*)
-4. **Adjudication** â€” Validates whether the borrower can service the debt using GDS and TDS ratios, compared against each lender's specific thresholds.
-5. **Offer Grouping & Ranking** â€” Returns surviving offers grouped by amortization, rate type, and term, sorted by effective rate (low to high).
+1. **Lender Filtering** - Narrows the pool to lenders whose policies are compatible with the borrower's province, credit score, transaction type, property type, and requested features etc.
+2. **Rates & Commissions** - Calculates the applicable interest rate and Perch commission for each eligible lender.
+3. **Buydown** - Where applicable, redirects a portion of commission to reduce the borrower's offered rate below the market benchmark. (*Should this be included?*)
+4. **Adjudication** - Validates whether the borrower can service the debt using GDS and TDS ratios, compared against each lender's specific thresholds.
+5. **Offer Grouping & Ranking** - Returns surviving offers grouped by amortization, rate type, and term, sorted by effective rate (low to high).
 
 ---
 
@@ -49,7 +49,7 @@ Unqualified endpoints consider the borrower's profile attributes e.g., property 
 - You are building a rate explorer, pre-qualification widget, or marketing surface where a borrower has not yet provided full financial details
 - You want to benchmark what the market looks like for a given property and product type
 
-**Real-world example:** A visitor lands on your marketing site and wants to know what mortgage rates look like today â€” no account, no application, no financial details entered. You call `POST /api/v1/offers/unqualified/lowest-rate` with the property type, province, and a standard down payment amount to display the best rate currently available across all lenders. The result powers a "Today's Lowest Rate" headline or rate ticker on the page thus giving prospective borrowers a compelling, market-accurate number without requiring them to share any personal financial information.
+**Real-world example:** A visitor lands on your marketing site and wants to know what mortgage rates look like today - no account, no application, no financial details entered. You call `POST /api/v1/offers/unqualified/lowest-rate` with the property type, province, and a standard down payment amount to display the best rate currently available across all lenders. The result powers a "Today's Lowest Rate" headline or rate ticker on the page thus giving prospective borrowers a compelling, market-accurate number without requiring them to share any personal financial information.
 
 ---
 
