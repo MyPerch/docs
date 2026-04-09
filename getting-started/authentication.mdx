@@ -1,96 +1,24 @@
 ---
 title: "Authentication"
-description: "Learn how to authenticate with the Perch Core API using API keys"
+description: "How to authenticate requests to the Perch Core API"
 ---
 
-To use the Perch Core API, you must authenticate each request with an API key that identifies your application and proves that the request is authorized. The authentication process is simple and stateless — just supply one header with each request.
+All requests to the Core API must include an `X-API-Key` header. This key identifies your firm and authorizes the request.
 
-## Overview
-
-Every API request must include the following header:
-
-- `X-API-Key` - Authenticates your request and identifies your firm
-
-<Note>
-The API key header is required for every request to the Core API.
-</Note>
-
-## Steps to obtain and use an API key
-
-<Steps>
-  <Step title="Contact Perch for API access">
-    Reach out to the Perch team at [partnersupport@myperch.io](mailto:partnersupport@myperch.io) to request API access for your organization. During this process, you'll need to provide:
-    
-    - Your business information and use case
-    - The type of integration you're planning (lead submission, tracking, etc.)
-    - Whether you need sandbox or production access (or both)
-    
-    <Info>
-    We recommend starting with sandbox access to test your integration before moving to production.
-    </Info>
-  </Step>
-
-  <Step title="Receive your API key">
-    Our team will provision a long-lived API key tied to your firm record. This key acts as a permanent access token and must be included in the `X-API-Key` header with every request.
-    
-    You'll also receive:
-    - Your specific API domain (sandbox or production)
-    - Documentation specific to your use case
-    - Any additional configuration details
-    
-    <Warning>
-    Treat your API keys like secrets — keep them out of client-side code and version control. Store them securely in your backend systems only.
-    </Warning>
-  </Step>
-
-  <Step title="Configure your environment">
-    Based on your access level, you'll use the appropriate sandbox or production domain. See the [API Overview](/getting-started/overview#domains) for the full list of domains by API type.
-
-    Always test your integration thoroughly in the sandbox environment before switching to production.
-  </Step>
-</Steps>
-
-### Sample request
-
-```http
-POST /firmMembers/abc12345/leads HTTP/1.1
-Host: api.partner.myperch.io
-X-API-Key: your-api-key-here
-Content-Type: application/json
-
-{
-  "email": "client@example.com",
-  "firstName": "John",
-  "lastName": "Doe",
-  "phone": "+1234567890"
-}
+```bash
+X-API-Key: YOUR_API_KEY
 ```
 
-## Security and key management
-
-- **API keys are tied to your firm account** and all requests are logged internally for security and auditing purposes
-- **Store them securely** — use environment variables or secure configuration management, never commit them to version control
-- **Rotate if compromised** — contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) immediately if you suspect your key has been compromised
-- **Backend only** — never expose API keys in frontend applications, mobile apps, or any client-side code
-- **HTTPS required** — all API requests must be made over HTTPS to ensure your API key is transmitted securely
-
-## Troubleshooting authentication
-
-Common authentication issues and solutions:
-
-| Error Code | Description | Solution |
-|------------|-------------|----------|
-| `401 Unauthorized` | No valid API key provided | Ensure the `X-API-Key` header is included and spelled correctly |
-| `403 Forbidden` | API key doesn't have required permissions | Contact support to verify your key's permissions for the requested resource |
-| `429 Too Many Requests` | Rate limit exceeded | Implement exponential backoff and respect rate limits |
-
 <Warning>
-If you experience persistent authentication issues, verify that you're using the correct domain for your environment (sandbox vs. production) and that your API key matches the environment you're targeting.
+Keep your API key out of client-side code and version control. Store it in your backend environment only. Contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) immediately if you suspect your key has been compromised.
 </Warning>
 
-## Next steps
+API keys are provisioned by the Perch team. To request access, contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io) with your business details and intended use case. You will receive a key scoped to either the sandbox or production environment, or both.
 
-- Review the [Overview](/getting-started/overview) for general API concepts and best practices
-- Set up [Postman](/getting-started/postman-setup) for API testing with your new credentials
-- Explore the [Partner API documentation](/api-reference/overview) to understand available endpoints
-- Start with our [lead submission guide](/api-reference/submitting-and-tracking-leads) for common use cases 
+## Troubleshooting
+
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| `401 Unauthorized` | Missing or invalid API key | Confirm the `X-API-Key` header is present and correctly spelled |
+| `403 Forbidden` | Key lacks required permissions | Contact support to verify your key's permissions |
+| `429 Too Many Requests` | Rate limit exceeded | Back off and retry — see [Rate Limits](/getting-started/rate-limits) |

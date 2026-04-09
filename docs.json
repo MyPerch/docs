@@ -42,7 +42,12 @@
           {
             "group": "Lending API",
             "pages": [
-              "lending-services/overview"
+              "lending-services/overview",
+              "lending-services/authentication",
+              "lending-services/postman-setup",
+              "lending-services/errors-and-response-codes",
+              "lending-services/rate-limits",
+              "lending-services/glossary"
             ]
           },
           {

@@ -7,17 +7,9 @@ Perch uses conventional HTTP response codes to indicate the success or failure o
 
 ## HTTP status codes
 
-| Status | Code | Description |
-|--------|------|-------------|
-| `200` | OK | Everything worked as expected. |
-| `201` | Created | Successfully created a new resource. |
-| `401` | Unauthorized | No valid API key provided. |
-| `403` | Forbidden | The API key doesn't have permissions to perform the request. |
-| `404` | Not Found | The requested resource doesn't exist or you do not have permission to access it. |
-| `409` | Conflict | The request conflicts with another request (perhaps due to using the same idempotent key). |
-| `422` | Unprocessable Entity | The request was unacceptable, often due to missing a required parameter. |
-| `429` | Too Many Requests | Too many requests hit the API too quickly. We recommend an exponential backoff of your requests. |
-| `5xx` | Server Error | Something went wrong on Perch's end. (These are rare.) |
+import HttpErrorCodes from '/snippets/http-error-codes.mdx';
+
+<HttpErrorCodes />
 
 ## Error response format
 
@@ -60,96 +52,4 @@ When validation fails on specific fields, you'll receive one of these error code
 | `REQUIRED` | The field is required but is undefined or missing. |
 | `IN_USE` | The field is in use by another record. |
 
-## Common error scenarios
-
-### Authentication errors
-
-**401 Unauthorized**
-- Missing `X-API-Key` header
-- Invalid or expired API key
-- API key format is incorrect
-
-**403 Forbidden**
-- API key doesn't have permission for the requested resource
-- Trying to access a resource outside your firm's scope
-
-### Client errors
-
-**404 Not Found**
-- Resource doesn't exist (lead, plan, etc.)
-- Typo in the endpoint URL
-- Resource exists but you don't have permission to access it
-
-**409 Conflict**
-- Duplicate lead with same email for your firm
-- Idempotency key collision
-- Resource state conflict
-
-**422 Unprocessable Entity**
-- Missing required fields
-- Invalid field values or formats
-- Business logic validation failures
-
-### Rate limiting
-
-**429 Too Many Requests**
-- Exceeded your hourly rate limit
-- Too many requests in a short burst
-- Implement exponential backoff and retry logic
-
-<Warning>
-For `429` errors, implement exponential backoff in your retry logic. Start with a 1-second delay and double it with each retry, up to a maximum of 60 seconds.
-</Warning>
-
-## Best practices for error handling
-
-1. **Always check status codes** - Don't assume requests succeeded without checking the HTTP status
-2. **Parse error messages** - The `message` field often contains human-readable explanations
-3. **Handle field errors** - Use the `fields` object to show specific validation errors to users
-4. **Implement retry logic** - For `429` and `5xx` errors, implement smart retry mechanisms
-5. **Log errors appropriately** - Log enough detail for debugging but avoid logging sensitive data
-6. **Graceful degradation** - Handle API errors gracefully in your user interface
-
-## Example error handling
-
-```javascript
-try {
-  const response = await fetch('/api/firmMembers/abc123/leads', {
-    method: 'POST',
-    headers: {
-      'X-API-Key': 'your-api-key',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(leadData)
-  });
-  
-  if (!response.ok) {
-    const errorData = await response.json();
-    
-    switch (response.status) {
-      case 401:
-        throw new Error('Authentication failed - check your API key');
-      case 403:
-        throw new Error('Permission denied - contact support');
-      case 409:
-        throw new Error(`Conflict: ${errorData.message}`);
-      case 422:
-        // Handle field validation errors
-        handleValidationErrors(errorData.fields);
-        break;
-      case 429:
-        // Implement retry with backoff
-        await retryWithBackoff(() => makeRequest());
-        break;
-      default:
-        throw new Error(`API error: ${errorData.message}`);
-    }
-  }
-  
-  const data = await response.json();
-  return data;
-} catch (error) {
-  console.error('API request failed:', error);
-  // Handle error appropriately in your application
-}
-``` 
+`429`, `502`, `503`, and `504` are safe to retry. `4xx` and `500` are not.

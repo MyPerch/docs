@@ -1,0 +1,14 @@
+| Code | Status | Description |
+|------|--------|-------------|
+| `200` | OK | Everything worked. |
+| `201` | Created | New resource created successfully. |
+| `400` | Bad Request | Malformed request that isn't a validation issue. |
+| `401` | Unauthorized | No valid credentials provided. |
+| `403` | Forbidden | Authenticated, but not allowed to do this. |
+| `404` | Not Found | The resource doesn't exist, or you can't see it. |
+| `409` | Conflict | A resource with that identifier already exists. |
+| `412` | Precondition Failed | A business rule blocked the operation. |
+| `422` | Unprocessable Entity | Validation failed — see the `errors` array for field-level details. |
+| `429` | Too Many Requests | Slow down. Back off exponentially and retry. |
+| `500` | Internal Server Error | Something broke on our side. |
+| `502/503/504` | Gateway Errors | An upstream dependency is unavailable or timed out. |

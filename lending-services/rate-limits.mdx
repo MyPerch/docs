@@ -1,72 +1,15 @@
-
-Understanding rate limiting  and best practices for the Perch Lending Services API 
-
-## How It Works (*review with Jamie*)
-
-Requests are rate limited on a rolling hourly quota. You also get a burst allowance of up to 6x the hourly average, calculated per minute.
-
-Say your quota is 500 requests/hour. That averages out to about 8 requests/minute. The burst allowance lets you spike to ~50 requests/minute for short stretches. But if you burn through your full 500 between 07:30 and 07:45, you're locked out until 08:30 when that window rolls forward.
-
-The window is rolling, not calendar-based. It doesn't reset on the hour.
-
-### What Happens When You Hit the Limit
-
-You get a `429 Too Many Requests` response:
-
-```json
-{
-  "code": 429,
-  "status": "RATE_LIMITED",
-  "message": "Too many requests. Please slow down and retry shortly.",
-  "requestId": "a1b2c3d4-...",
-  "timestamp": "2026-04-06T12:34:56.789Z"
-}
-```
+---
+title: "Rate Limits"
+description: "Rate limiting policies for the Perch Lending Services API"
 ---
 
-## Handling Rate Limits
+Requests are rate limited on a rolling hourly quota with a burst allowance of up to 6x the hourly average per minute.
 
-Use exponential backoff. Start at 1 second, double on each retry, cap at 60 seconds.
+For example, if your quota is 500 requests/hour, you cannot exceed 50 requests/minute. The window is rolling — if you exhaust your quota between 07:30 and 07:45, you must wait until 08:30 before making further requests.
 
-```javascript
-async function makeRequestWithRetry(url, options, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        "X-API-Key": apiKey,
-        ...options.headers,
-      },
-    });
-
-    if (response.status !== 429) {
-      return response;
-    }
-
-    // 429 - back off before retrying
-    const delay = Math.min(Math.pow(2, attempt) * 1000, 60000);
-    console.warn(`Rate limited. Retrying in ${delay / 1000}s (attempt ${attempt + 1}/${maxRetries})`);
-    await new Promise((resolve) => setTimeout(resolve, delay));
-  }
-
-  throw new Error("Rate limit exceeded after all retries");
-}
-```
-
-The retry delays look like this:
-
-| Attempt | Delay |
-|---------|-------|
-| 1 | 1 second |
-| 2 | 2 seconds |
-| 3 | 4 seconds |
-| 4 | 8 seconds |
-| 5 | 16 seconds |
-
-Five retries with exponential backoff covers about 31 seconds total. That's usually enough for a burst limit to clear. If not, you're probably exceeding your hourly quota and need to throttle on your side.
-
----
+<Note>
+The window is rolling, not calendar-based. It does not reset on the hour.
+</Note>
 
 ## Quotas
 
@@ -74,61 +17,7 @@ Your specific limits depend on your partnership agreement.
 
 | Environment | Typical Quota | Burst Allowance |
 |-------------|--------------|-----------------|
-| Sandbox | 100-200 requests/hour | Up to 6x the per-minute average |
+| Sandbox | 100–200 requests/hour | Up to 6x the per-minute average |
 | Production | Based on your integration needs | Up to 6x the per-minute average |
 
-If you're not sure what your quota is, or you need it raised, reach out to partnersupport@myperch.io.
-
----
-
-## Best Practices
-
-**Track your own request rate.** Don't rely on 429s to tell you when to slow down. Keep a counter and throttle before you hit the limit.
-
-**Cache responses.** If you're fetching the same resource repeatedly, cache it. Especially for data that doesn't change within a session.
-
-**Batch where you can.** Ten individual requests cost ten against your quota. One batch request (where the API supports it) costs one.
-
-**Spread requests out.** If you have 200 requests to make, don't fire them all at once. Space them across the window. A simple rate limiter on your side goes a long way.
-
-**Don't retry 4xx errors (other than 429).** A 400, 401, 404, or 422 will fail the same way every time. Retrying just wastes quota.
-
----
-
-## Examples
-
-### Normal Usage
-
-Nothing special needed when you're within limits. Make requests, process responses.
-
-```javascript
-// Search for the lowest rate qualified offer
-const response = await makeRequestWithRetry("/api/v1/offers/qualified/lowestRate", {
-  method: "POST",
-  body: JSON.stringify({
-    mortgageType: "FIXED",
-    amortization: 25,
-    propertyValue: 500000,
-    downPayment: 100000,
-    // ... other search criteria
-  }),
-});
-
-if (response.ok) {
-  const offer = await response.json();
-  displayOffer(offer);
-}
-```
-
-### Recovering from Rate Limit Exceeded
-
-If you've already hit the limit and you're getting 429s, wait before trying anything else.
-
-```javascript
-async function recoverFromRateLimit(retryFn) {
-  const backoffMinutes = 1;
-  console.warn(`Rate limit exceeded. Waiting ${backoffMinutes} minute before resuming.`);
-  await new Promise((resolve) => setTimeout(resolve, backoffMinutes * 60000));
-  return retryFn();
-}
-```
+To find out your quota or request an increase, contact [partnersupport@myperch.io](mailto:partnersupport@myperch.io).
